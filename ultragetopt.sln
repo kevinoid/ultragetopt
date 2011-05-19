@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ultragetopt", "ultragetopt.vcproj", "{BFAC75E3-F679-4427-B79F-586DBD18E447}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Shared|Win32 = Debug Shared|Win32
+		Debug Static|Win32 = Debug Static|Win32
+		Release Shared|Win32 = Release Shared|Win32
+		Release Static|Win32 = Release Static|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Debug Shared|Win32.ActiveCfg = Debug Shared|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Debug Shared|Win32.Build.0 = Debug Shared|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Debug Static|Win32.ActiveCfg = Debug Static|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Debug Static|Win32.Build.0 = Debug Static|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Release Shared|Win32.ActiveCfg = Release Shared|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Release Shared|Win32.Build.0 = Release Shared|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Release Static|Win32.ActiveCfg = Release Static|Win32
+		{BFAC75E3-F679-4427-B79F-586DBD18E447}.Release Static|Win32.Build.0 = Release Static|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

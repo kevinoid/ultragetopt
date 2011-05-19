@@ -1,0 +1,9 @@
+This file documents known bugs/limitations of the software.
+
+* GNU getopt() handles option permutation somewhat differently.  It shifts
+  options around on calls subsequent to actually returning the next option (so
+  cmd word -a) would return -a then on the next call shift the command line to
+  read cmd -a word and return -1.  It therefore also has different values for
+  optind than ultragetopt in these cases.  If there is a use case that requires
+  this behavior, please let the maintainer know about it so that a change to
+  ultragetopt to mimic this behavior can be considered.

@@ -1,0 +1,79 @@
+			  Welcome to UltraGetopt
+
+UltraGetopt is a replacement for getopt() with support for many common
+extensions, MS-DOS formatted option strings, and much more.  UltraGetopt is
+free software.  Please see the file COPYING for details.  For building,
+installation, and usage instructions please see the INSTALL file.
+
+			    ==== DEFINES ====
+When compiling ultragetopt.c, there are several defines that change the default
+behavior of the (ultra)getopt functions.
+
+Meta-options:
+These options will set the other options below to appropriate values to mimic
+the functionality of other getopt suites.
+ULTRAGETOPT_LIKE_BSD
+	Behave like BSD getopt()
+ULTRAGETOPT_LIKE_DARWIN
+	Behave like Darwin (Mac OS) getopt()
+ULTRAGETOPT_LIKE_GNU
+	Behave like GNU getopt()
+ULTRAGETOPT_LIKE_POSIX 
+	Behave like POSIX definition of getopt()
+
+Compiletime-only Behavior Options:
+These options change the default behavior of getopt() and do not have a
+corresponding runtime flag (although they may be affected by other arguments).
+ULTRAGETOPT_ASSIGNSPACE
+	Parse "-o value" as "value" rather than " value"
+	Note: Only applicable when argv[x] == "-o value", not for
+	      argv[x] == "-o" [x+1] == "value"
+ULTRAGETOPT_NO_OPTIONALARG
+	Do not support GNU "::" optional argument.
+	Note:  Always supported in *_long*() functions.
+ULTRAGETOPT_NO_OPTIONASSIGN
+	Do not support --option=value syntax
+
+Runtime-selectable options:
+These options can all be selected by passing their value as a flag to the
+ultragetopt_tunable() function, where ULTRAGETOPT_ is replaced by UGO_ for
+compactness of the source.  Defining these values sets the default state of
+the flag when invoked from ultragetopt{_long,_dos}().
+ULTRAGETOPT_DEFAULTOPTOPT
+	Set optopt to this value by default on each call to getopt()
+ULTRAGETOPT_HYPHENARG
+	Accept -option -arg as -option with argument "-arg" rather than -option
+	missing argument
+ULTRAGETOPT_LONGOPTADJACENT
+	Accept adjacent arguments to long options (e.g. --optionarg) based on
+	first longest-match
+ULTRAGETOPT_OPTIONPERMUTE
+	Permute options, do not stop at first non-option.   A leading '+' in
+	shortopts or when the $POSIXLY_CORRECT environmental variable are set,
+	permuting will be stopped @ runtime
+ULTRAGETOPT_SHORTOPTASSIGN
+	Support -o=file syntax for short options
+ULTRAGETOPT_SEPARATEDOPTIONAL
+	Accept separated optional arguments.  Parse -o file as -o with argument
+	file rather than -o without an argument and non-option argument "file"
+ULTRAGETOPT_DOS_DASH
+	Support - and -- options in ultragetopt*_dos() functions
+ULTRAGETOPT_NO_EATDASHDASH
+	Do not increment optind when argv[optind] is -- as required by SUS/POSIX
+
+Error message options:
+These options change the formatting of the error messages produced by
+ultragetopt.
+ULTRAGETOPT_BSD_ERRORS
+	Print error messages matching BSD getopt
+ULTRAGETOPT_DARWIN_ERRORS
+	Print error messages matching Darwin getopt
+ULTRAGETOPT_GNU_ERRORS
+	Print error messages matching GNU getopt
+
+
+			    ==== CONTACT ====
+If you have any suggestions, ideas, bugs, incompatibilities with existing getopt
+implementations, or other feedback please don't hesitate to let the current
+maintainer(s) know about it.  (Contact information for the current maintainer
+is listed in AUTHORS)

@@ -1,0 +1,23 @@
+To install ultragetopt as a shared library, run
+
+	./configure
+	make
+	make install
+
+where the final command is run with the necessary privileges (depending on the
+prefix argument given to configure or to access /usr/local if none specified).
+
+To include ultragetopt as part of a software package, simply copy
+ultragetopt.{c,h} into the appropriate directory and include it in the build
+scripts for the software package.  To use ultragetopt*() functions as
+replacements for getopt(), define ULTRAGETOPT_REPLACE_GETOPT before including
+"ultragetopt.h".  (Note:  If you really need the opt* variables to not be
+macros, simply run sed 's/ultra//g' on the ultragetopt source files and do not
+define ULTRAGETOPT_REPLACE_GETOPT when including ultragetopt.h)
+
+Note also, for including ultragetopt.c as part of a software package, if
+targeted systems may not provide strcasecmp or strncasecmp you must provide a
+replacement for these functions.  For systems (such as Windows) that provide
+_stricmp and _strnicmp, define HAVE__STRICMP and HAVE__STRNICMP and those
+functions will perform the needed function (for autoconf, this can be
+accomplished with AC_CHECK_FUNCS([strcasecmp strnicasecmp _stricmp _strnicmp]).

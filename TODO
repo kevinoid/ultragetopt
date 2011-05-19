@@ -1,0 +1,12 @@
+This file contains a list of things that need work (or are being considered).
+Anyone can feel free to add thoughts for future features or plans for the
+software as they wish.  This file is just for brainstorming and documenting
+ideas that have been proposed.
+
+* Create a thorough test script/framework and run on all variants of getopt
+  that you can find and report on incompatibilities
+* Create man page?  Are there systems using man pages that don't have getopt()
+  documentation already?  Would a separate ultragetopt man page be useful?
+* Compiled help file?  Do Windows developers use these things?
+* Implement some/all of the features of egetopt()?
+  http://groups.google.com/group/alt.sources/browse_thread/thread/13aa167188322555/b8912a259599366f%23b8912a259599366f
