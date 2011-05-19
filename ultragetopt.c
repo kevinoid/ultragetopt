@@ -32,6 +32,7 @@
 #include <stdio.h>	/* fprintf() */
 #include <stdlib.h>	/* getenv() */
 #include <string.h>	/* strcmp(), strncmp(), strchr() */
+#include <strings.h>	/* strcasecmp(), strncasecmp() */
 
 #undef ULTRAGETOPT_REPLACE_GETOPT   /* Protect against project-wide defines */
 #include "ultragetopt.h"
