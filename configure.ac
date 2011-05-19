@@ -6,21 +6,11 @@ AC_INIT([ultragetopt], [0.6.0], [Kevin Locke <kwl7@cornell.edu>])
 AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile])
-# AC_GNU_SOURCE
 AM_INIT_AUTOMAKE
-
-# Support Windows DLL later...
-#AC_LIBTOOL_WIN32_DLL
-
-# Prevent AC_PROG_LIBTOOL from checking for C++, Fortran, and Java
-# this hack should be unnecessary soon
-m4_defun([_LT_AC_LANG_CXX_CONFIG], [:])
-m4_defun([_LT_AC_LANG_F77_CONFIG], [:])
-m4_defun([_LT_AC_LANG_GCJ_CONFIG], [:])
+LT_INIT([win32-dll])
 
 # Checks for programs.
 AC_PROG_CC
-AC_PROG_LIBTOOL
 
 # Checks for header files.
 #AC_HEADER_STDC
