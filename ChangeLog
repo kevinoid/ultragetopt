@@ -1,4 +1,4 @@
-2007-06-23 12:55  Kevin Locke <kwl7@cornell.edu>
+2007-06-23 12:55  Kevin Locke <kevin@kevinlocke.name>
 
 	* configure.ac: Bump version
 	* ultragetopt.h: Renamed UGO_LONGONLY to UGO_SINGLELEADERLONG
@@ -15,13 +15,13 @@
 	* ultragetopt.rc: New resources file for DLL versioning
 	* ultragetopt.sln, ultragetopt.vcproj: New Visual Studio build files
 
-2007-03-26 21:38  Kevin Locke <kwl7@cornell.edu>
+2007-03-26 21:38  Kevin Locke <kevin@kevinlocke.name>
 
         * configure.ac: Added libtool for configuration
 	* Makefile.am: Added libtool for building
 	* ultragetopt.h: Added C++ checks
 	* ultragetopt.c: Added better function checks based on autoconf
 
-2007-03-24 10:51  Kevin Locke <kwl7@cornell.edu>
+2007-03-24 10:51  Kevin Locke <kevin@kevinlocke.name>
 
         * *.*: Initial release.

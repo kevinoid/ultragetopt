@@ -68,7 +68,7 @@ BEGIN
             VALUE "FileDescription", "UltraGetopt Library"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "UltraGetopt"
-            VALUE "LegalCopyright", "Copyright (C) 2007 Kevin Locke <kwl7@cornell.edu>"
+            VALUE "LegalCopyright", "Copyright (C) 2007 Kevin Locke <kevin@kevinlocke.name>"
             VALUE "ProductName", " UltraGetopt Library"
             VALUE "ProductVersion", "1, 0, 0, 1"
         END
