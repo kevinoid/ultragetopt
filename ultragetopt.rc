@@ -47,8 +47,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 0,6,2,0
+ PRODUCTVERSION 0,6,2,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -66,11 +66,11 @@ BEGIN
             VALUE "Comments", "Versatile and customizable getopt implementation"
             VALUE "CompanyName", "Kevin Locke"
             VALUE "FileDescription", "UltraGetopt Library"
-            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "FileVersion", "0.6.2"
             VALUE "InternalName", "UltraGetopt"
             VALUE "LegalCopyright", "Copyright (C) 2007-2011 Kevin Locke <kevin@kevinlocke.name>"
             VALUE "ProductName", " UltraGetopt Library"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "ProductVersion", "0.6.2"
         END
     END
     BLOCK "VarFileInfo"

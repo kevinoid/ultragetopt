@@ -3,7 +3,7 @@
 include_HEADERS = ultragetopt.h
 lib_LTLIBRARIES = libultragetopt.la
 libultragetopt_la_SOURCES = ultragetopt.h ultragetopt.c
-libultragetopt_la_LDFLAGS = -version-info 0:0:0
+libultragetopt_la_LDFLAGS = -version-info 0:1:0
 
 MAINTAINERCLEANFILES =	Makefile.in aclocal.m4 configure $(AUX_DIST)
 

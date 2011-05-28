@@ -1,3 +1,10 @@
+2011-05-28 11:24  Kevin Locke <kevin@kevinlocke.name>
+
+	* configure.ac: Bump version
+	* ultragetopt.c: Refactor option/optarg matching code to fix several
+	bugs when dealing with "-" argument.
+	* ultragetopt.h: Add appropriate __declspec for DLL creation
+
 2007-06-23 12:55  Kevin Locke <kevin@kevinlocke.name>
 
 	* configure.ac: Bump version

@@ -2,7 +2,7 @@
 # This script is part of ultragetopt, see COPYING for licensing details
 
 # Initialize and configure
-AC_INIT([ultragetopt], [0.6.0], [Kevin Locke <kevin@kevinlocke.name>])
+AC_INIT([ultragetopt], [0.6.2], [Kevin Locke <kevin@kevinlocke.name>])
 AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile])
