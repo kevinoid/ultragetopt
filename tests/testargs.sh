@@ -2,9 +2,15 @@
 # Test arguments for ultragetopt and vendor-provided getopts
 
 # Please increment this when you add/changes tests!
-VERSION="23"
+VERSION="24"
 
-if ! test -x getopt ; then
+if [ -n "$1" ] ; then
+	GETOPT=$1
+else
+	GETOPT=./getopt
+fi
+
+if ! test -x "$GETOPT" ; then
 	exec 1>&2
 	echo "Please compile the test script (getopt.c) into an executable"
 	echo "called getopt using the vendor-provided getopt functions before"
@@ -12,13 +18,11 @@ if ! test -x getopt ; then
 	exit 1
 fi
 
-exec > vendor-getopt.log 2>&1
-
 testopts()
 {
 	echo ""
 	echo "--- Running Command $@ ---"
-	./getopt "$@"
+	"$GETOPT" "$@"
 }
 
 echo "=== Running Getopt Test Script Version $VERSION ==="
@@ -29,6 +33,9 @@ testopts "nr:o::" "" "progname" "-o" "arg" "-n" "path" "path"
 testopts "nr:o::" "" "progname" "-n" "-o" "arg" "--" "path" "path"
 testopts "nr:o::" "" "progname" "-n" "-o" "--" "path" "path"
 testopts "nr:o::" "" "progname" "-n" "-orarg" "path" "path"
+
+# Test options after terminator
+testopts "nr:o::" "" "progname" "-n" "-o" "--" "-n" "-o" "path" "path"
 
 # Test adjacent short arguments and with adjacent arguments
 testopts "nr:o::" "" "progname" "-n-n"
@@ -69,3 +76,16 @@ testopts "nr:o::" "" "progname" "-n=arg"
 testopts "nr:o:::" "" "progname" "-:" "path"
 testopts "nr:o::=" "" "progname" "-=" "path"
 testopts "nr:o::+" "" "progname" "-+" "path"
+
+# Odd numbers of -s
+testopts "nr:o::" "reqarg: optarg::" "progname" "- -n -"
+testopts "nr:o::" "reqarg: optarg::" "progname" - -n -
+testopts "nr:o::" "reqarg: optarg::" "progname" - ---reqarg -
+testopts "nr:o::" "reqarg: optarg::" "progname" - -r -
+testopts "nr:o::" "reqarg: optarg::" "progname" --- -r ---
+
+# -- as option arguments
+testopts "nr:o:::" "" "progname" "-r--"
+testopts "nr:o:::" "" "progname" "-o--"
+testopts "nr:o:::" "" "progname" "-r" "--" "foo"
+testopts "nr:o:::" "" "progname" "-o" "--" "foo"
