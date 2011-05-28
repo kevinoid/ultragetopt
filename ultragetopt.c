@@ -591,6 +591,13 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     if (!like_option(argv[ultraoptind], optleaders)) {
 	int shifted;
 
+	if (like_optterm(argv[ultraoptind], optleaders)) {
+	    if (!(flags & UGO_NOEATDASHDASH))
+		ultraoptind++;
+
+	    return -1;
+	}
+
 	if (flags & UGO_NONOPTARG) {
 	    ultraoptarg = argv[ultraoptind];
 	    ultraoptind++;
@@ -608,7 +615,9 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	    noseparg = 1;
 
 	if (like_optterm(argv[ultraoptind], optleaders)) {
-	    ++ultraoptind;
+	    if (!(flags & UGO_NOEATDASHDASH))
+		ultraoptind++;
+
 	    return -1;
 	}
     }
@@ -616,18 +625,10 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     /* At this point we must have an option of some sort */
     assert(like_option(argv[ultraoptind], optleaders));
 
-    /* Handle -- */
+    /* Handle --* */
     if (argv[ultraoptind][0] == argv[ultraoptind][1]) {
 	int longind;
 	char *longarg;
-
-	/* End of options signaled by string of 2 leaders alone ("--") */
-	if (argv[ultraoptind][2] == '\0') {
-	    if (!(flags & UGO_NOEATDASHDASH))
-		ultraoptind++;
-
-	    return -1;
-	}
 
 	/* Handle long option */
 	longind = match_longopt(ultraoptind, argv, longopts, assigners,
