@@ -261,17 +261,24 @@ static inline int like_option(const char *arg, const char *optleaders)
 	(arg[2] != '\0' || arg[0] != arg[1]);	/* Not -- */
 }
 
+/* Check if an argument string looks like the option terminator string */
+static inline int like_optterm(const char *arg, const char *optleaders)
+{
+    return arg != NULL &&
+	arg[0] != '\0' &&
+	arg[1] != '\0' &&
+	arg[2] == '\0' &&
+	arg[0] == arg[1] &&
+	strchr(optleaders, arg[0]);
+}
+
 /* Check if an argument string looks like an option argument string */
 static inline int like_optarg(const char *arg, const char *optleaders,
 			      int allow_option)
 {
     return arg != NULL &&
 	(allow_option || !like_option(arg, optleaders)) &&
-	(arg[0] == '\0' ||			/* Not -- */
-	    arg[1] == '\0' ||
-	    arg[2] != '\0' ||
-	    arg[0] != arg[1] ||
-	    !strrchr(optleaders, arg[0]));
+	!like_optterm(arg, optleaders);
 }
 
 /* If argv[curopt] matches a long option, return the index of that option
