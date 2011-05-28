@@ -50,10 +50,6 @@
 # define strchr index
 #endif
 
-#if !HAVE_STRRCHR && HAVE_RINDEX
-# define strrchr rindex
-#endif
-
 /* Supported defines:
  * ULTRAGETOPT_LIKE_BSD		Behave like BSD getopt()
  * ULTRAGETOPT_LIKE_DARWIN	Behave like Darwin (Mac OS) getopt()

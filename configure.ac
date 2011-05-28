@@ -18,6 +18,7 @@ AC_PROG_CC
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
+AC_C_INLINE
 AC_TYPE_SIZE_T
 
 # Checks for libraries.
@@ -27,7 +28,6 @@ AC_TYPE_SIZE_T
 #	 ultragetopt.c to work in standard build systems with little fuss
 #AC_REPLACE_FUNCS([strcasecmp strncasecmp])
 AC_CHECK_FUNCS([strchr index], [break])
-AC_CHECK_FUNCS([strrchr rindex], [break])
 AC_CHECK_FUNCS([strcasecmp _stricmp], [break])
 AC_CHECK_FUNCS([strncasecmp _strnicmp], [break])
 
