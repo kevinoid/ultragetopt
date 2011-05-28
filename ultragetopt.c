@@ -424,7 +424,7 @@ static int has_separate_argument(int curopt, int argc, char *const argv[],
     return 0;
 }
 
-/* Bring the next option up to ultraoptind if there is one
+/* Bring the next option, or terminator, up to ultraoptind if there is one
  * Returns number of words shifted forward
  */
 static int permute_options(int argc, char *argv[], const char *shortopts,
@@ -442,14 +442,15 @@ static int permute_options(int argc, char *argv[], const char *shortopts,
 	int shiftarg = 0;
 	int i;
 
-	/* Skip non-options */
-	if (!like_option(argv[curopt], optleaders))
+	/* Permute options and the option terminator */
+	if (like_option(argv[curopt], optleaders)) {
+	    /* Check if we need to shift argument too */
+	    shiftarg = has_separate_argument(curopt, argc, argv, shortopts,
+					     longopts, assigners, optleaders,
+					     flags);
+	} else if (!like_optterm(argv[curopt], optleaders)) {
 	    continue;
-
-	/* Check if we need to shift argument too */
-	shiftarg = has_separate_argument(curopt, argc, argv, shortopts,
-					 longopts, assigners, optleaders,
-					 flags);
+	}
 
 	/* Shift option */
 	for (i=curopt; i>ultraoptind; i--) {
@@ -605,6 +606,11 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	    return -1;
 	else if (shifted == 1)
 	    noseparg = 1;
+
+	if (like_optterm(argv[ultraoptind], optleaders)) {
+	    ++ultraoptind;
+	    return -1;
+	}
     }
 
     /* At this point we must have an option of some sort */
