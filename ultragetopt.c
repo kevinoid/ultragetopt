@@ -273,8 +273,8 @@ static inline int like_optarg(const char *arg, const char *optleaders,
 			      int allow_option)
 {
     return arg != NULL &&
-	(allow_option || !like_option(arg, optleaders)) &&
-	!like_optterm(arg, optleaders);
+	(allow_option ||
+	    (!like_option(arg, optleaders) && !like_optterm(arg, optleaders)));
 }
 
 /* If argv[curopt] matches a long option, return the index of that option
