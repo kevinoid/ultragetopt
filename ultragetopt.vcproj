@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="inline=__inline;WIN32;_DEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -101,7 +101,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="inline=__inline;WIN32;NDEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				DisableLanguageExtensions="true"
 				UsePrecompiledHeader="0"
@@ -162,7 +162,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="inline=__inline;WIN32;_DEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -235,7 +235,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="inline=__inline;WIN32;NDEBUG;_LIB;HAVE__STRICMP=1;HAVE__STRNICMP=1;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				DisableLanguageExtensions="true"
 				UsePrecompiledHeader="0"
