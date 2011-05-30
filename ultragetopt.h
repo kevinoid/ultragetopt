@@ -9,6 +9,17 @@
 extern "C" {
 #endif
 
+#ifdef _WIN32
+# ifdef ULTRAGETOPT_DLL_IMPORT
+#  define ULTRAGETOPT_LINKAGE	extern __declspec(dllimport)
+# elif DLL_EXPORT
+#  define ULTRAGETOPT_LINKAGE	__declspec(dllexport)
+# endif
+#endif /* !defined(_WIN32) */
+#ifndef ULTRAGETOPT_LINKAGE
+# define ULTRAGETOPT_LINKAGE	extern
+#endif
+
 /* Flag values to pass to getopt_tunable() */
 #define UGO_CASEINSENSITIVE	0x1
 #define UGO_SINGLELEADERLONG	0x2
@@ -37,21 +48,23 @@ struct option {
 };
 #endif /* required_argument */
 
-extern char *ultraoptarg;
-extern int ultraoptind, ultraopterr, ultraoptopt, ultraoptreset;
+ULTRAGETOPT_LINKAGE char *ultraoptarg;
+ULTRAGETOPT_LINKAGE int ultraoptind, ultraopterr, ultraoptopt, ultraoptreset;
 
-int ultragetopt(int argc, char *const argv[], const char *optstring);
+ULTRAGETOPT_LINKAGE int ultragetopt(int argc, char *const argv[],
+	const char *optstring);
 
-int ultragetopt_long(int argc, char *const argv[], const char *shortopts,
-		     const struct option *longopts, int *indexptr);
+ULTRAGETOPT_LINKAGE int ultragetopt_long(int argc, char *const argv[],
+	const char *shortopts, const struct option *longopts, int *indexptr);
 
-int ultragetopt_long_only(int argc, char *const argv[], const char *shortopts,
-			  const struct option *longopts, int *indexptr);
+ULTRAGETOPT_LINKAGE int ultragetopt_long_only(int argc, char *const argv[],
+	const char *shortopts, const struct option *longopts, int *indexptr);
 
-int ultragetopt_dos(int argc, char * const argv[], const char *optstring);
+ULTRAGETOPT_LINKAGE int ultragetopt_dos(int argc, char * const argv[],
+	const char *optstring);
 
-int ultragetopt_long_dos(int argc, char *const argv[], const char *shortopts,
-		    	 const struct option *longopts, int *indexptr);
+ULTRAGETOPT_LINKAGE int ultragetopt_long_dos(int argc, char *const argv[],
+	const char *shortopts, const struct option *longopts, int *indexptr);
 
 /* Getopt with modifiable (tunable) behavior - also the backend for all other
  * getopt functions.
@@ -61,10 +74,9 @@ int ultragetopt_long_dos(int argc, char *const argv[], const char *shortopts,
  *	        (usually "-" on UNIX, "/" on DOS)
  * flags - see README for list of accepted flags
  */
-int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
-			const struct option *longopts, int *indexptr,
-			const char *assigners, const char *optleaders,
-			int flags);
+ULTRAGETOPT_LINKAGE int ultragetopt_tunable(int argc, char *const argv[],
+	const char *shortopts, const struct option *longopts, int *indexptr,
+	const char *assigners, const char *optleaders, int flags);
 
 #ifdef ULTRAGETOPT_REPLACE_GETOPT
 # define optarg ultraoptarg
