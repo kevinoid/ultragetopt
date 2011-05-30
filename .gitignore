@@ -1,7 +1,11 @@
 *~
+*.aps
 *.la
 *.lo
+*.ncb
 *.o
+*.suo
+*.user
 .deps/
 .libs/
 autom4te.cache/
