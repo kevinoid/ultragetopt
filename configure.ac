@@ -7,10 +7,13 @@ AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile])
 AM_INIT_AUTOMAKE
-LT_INIT([win32-dll])
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_AR
+
+# Initialize libtool (must be after AM_PROG_AR)
+LT_INIT([win32-dll])
 
 # Checks for header files.
 #AC_HEADER_STDC
