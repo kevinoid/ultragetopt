@@ -14,6 +14,6 @@ EXTRA_DIST = autogen.sh \
 	     BUGS \
 	     ultragetopt.rc \
 	     ultragetopt.sln \
-	     ultragetopt.vcproj \
-	     tests/getopt.c \
-	     tests/testargs.sh
+	     ultragetopt.vcproj
+
+SUBDIRS = tests

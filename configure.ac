@@ -5,7 +5,7 @@
 AC_INIT([ultragetopt], [0.6.2], [Kevin Locke <kevin@kevinlocke.name>])
 AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile tests/Makefile])
 AM_INIT_AUTOMAKE([std-options subdir-objects])
 
 # Checks for programs.
@@ -24,6 +24,16 @@ AC_CHECK_HEADERS([strings.h])
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
+
+# Check compiler hardening flag support
+# Note:  This is only used for test binaries to ensure functionality.
+# Enabling these flags for library builds is left to the caller (via CFLAGS).
+AX_CHECK_COMPILE_FLAG([-fstack-protector-strong],
+		      [AX_APPEND_FLAG([-fstack-protector-strong],
+				      [HARDENING_CFLAGS])],
+		      [AX_CHECK_COMPILE_FLAG([-fstack-protector],
+					     [AX_APPEND_FLAG([-fstack-protector],
+							     [HARDENING_CFLAGS])])])
 
 # Enable compiler warnings
 AX_COMPILER_FLAGS([WARN_CFLAGS],
@@ -44,5 +54,9 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
 AC_CHECK_FUNCS([strchr index], [break])
 AC_CHECK_FUNCS([strcasecmp _stricmp], [break])
 AC_CHECK_FUNCS([strncasecmp _strnicmp], [break])
+
+# pkg-config support is currently added but unreleased
+# PKG_CHECK_MODULES([CRITERION], [criterion])
+AC_CHECK_LIB([criterion], [criterion_initialize])
 
 AC_OUTPUT
