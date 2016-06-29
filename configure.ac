@@ -6,7 +6,7 @@ AC_INIT([ultragetopt], [0.6.2], [Kevin Locke <kevin@kevinlocke.name>])
 AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([std-options subdir-objects])
 
 # Checks for programs.
 AC_PROG_CC
