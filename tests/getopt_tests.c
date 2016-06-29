@@ -26,8 +26,8 @@
  */
 #if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 #define _array_size_chk(arr)                                            \
-        BUILD_ASSERT_OR_ZERO(!__builtin_types_compatible_p(typeof(arr), \
-                                                        typeof(&(arr)[0])))
+        BUILD_ASSERT_OR_ZERO(!__builtin_types_compatible_p(__typeof__(arr), \
+                                                        __typeof__(&(arr)[0])))
 #else
 #define _array_size_chk(arr) BUILD_ASSERT_OR_ZERO((void*)&(arr) == &(arr)[0])
 #endif
