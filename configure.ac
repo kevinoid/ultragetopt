@@ -25,6 +25,16 @@ AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
+# Enable compiler warnings
+AX_COMPILER_FLAGS([WARN_CFLAGS],
+		  [WARN_LDFLAGS],
+		  [yes],
+		  [],
+		  [-Wconversion \
+		   -Wstack-protector \
+		   -Wunsafe-loop-optimizations \
+		   -pedantic])
+
 # Checks for libraries.
 
 # Checks for library functions.
