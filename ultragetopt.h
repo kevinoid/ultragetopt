@@ -2,8 +2,8 @@
 /* define ULTRAGETOPT_REPLACE_GETOPT for ultragetopt*() to replace getopt*() */
 /* define ULTRAGETOPT_ONLY_DOS for ultragetopt*_dos() to replace ultragetopt*() */
 
-#ifndef INCLUDED_GETOPT_H
-#define INCLUDED_GETOPT_H 1
+#ifndef INCLUDED_ULTRAGETOPT_H
+#define INCLUDED_ULTRAGETOPT_H 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,4 +109,4 @@ ULTRAGETOPT_LINKAGE int ultragetopt_tunable(int argc, char *const argv[],
 }
 #endif
 
-#endif /* INCLUDED_GETOPT_H */
+#endif /* INCLUDED_ULTRAGETOPT_H */
