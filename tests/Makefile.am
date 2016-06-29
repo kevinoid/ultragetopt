@@ -12,12 +12,19 @@ AM_LDFLAGS = $(WARN_LDFLAGS)
 
 TESTS = check_ultragetopt
 
-check_PROGRAMS = check_ultragetopt check_system_getopt
+check_PROGRAMS = check_ultragetopt
 
 check_ultragetopt_SOURCES = getopt_tests.c ../ultragetopt.c
 check_ultragetopt_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)
 check_ultragetopt_LDADD = -lcriterion
 
-check_system_getopt_SOURCES = getopt_tests.c
-check_system_getopt_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_SYSTEM_GETOPT=1
-check_system_getopt_LDADD = -lcriterion
+if TEST_HOST_GETOPT
+TESTS += check_host_getopt
+check_PROGRAMS += check_host_getopt
+check_host_getopt_SOURCES = getopt_tests.c
+check_host_getopt_CPPFLAGS = $(AM_CPPFLAGS) \
+			     -I$(top_srcdir) \
+			     -DTEST_HOST_GETOPT=1 \
+			     -DULTRAGETOPT_LIKE_$(HOST_GETOPT_BEHAVIOR)=1
+check_host_getopt_LDADD = -lcriterion
+endif

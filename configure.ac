@@ -8,6 +8,9 @@ AC_CONFIG_SRCDIR([ultragetopt.c])
 AC_CONFIG_FILES([Makefile tests/Makefile])
 AM_INIT_AUTOMAKE([std-options subdir-objects])
 
+# Determine the host system (used for reference in tests)
+AC_CANONICAL_HOST
+
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_AR
@@ -58,5 +61,15 @@ AC_CHECK_FUNCS([strncasecmp _strnicmp], [break])
 # pkg-config support is currently added but unreleased
 # PKG_CHECK_MODULES([CRITERION], [criterion])
 AC_CHECK_LIB([criterion], [criterion_initialize])
+
+# Checks for system getopt behavior
+HOST_GETOPT_BEHAVIOR=""
+AS_CASE([$host_os],
+	[darwin*|macos*], [HOST_GETOPT_BEHAVIOR="DARWIN"],
+	[gnu*|linux*], [HOST_GETOPT_BEHAVIOR="GNU"],
+	[*bsd*], [HOST_GETOPT_BEHAVIOR="BSD"],
+	AC_MSG_WARN([Unrecognized host system.  Not checking system getopt.]))
+AC_SUBST([HOST_GETOPT_BEHAVIOR])
+AM_CONDITIONAL([TEST_HOST_GETOPT], [test "x$HOST_GETOPT_BEHAVIOR" != "x"])
 
 AC_OUTPUT

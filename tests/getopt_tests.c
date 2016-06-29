@@ -9,12 +9,14 @@
 
 #include <criterion/criterion.h>
 
-#ifdef TEST_SYSTEM_GETOPT
+#ifdef TEST_HOST_GETOPT
 # include <unistd.h>
 #else
 # define ULTRAGETOPT_REPLACE_GETOPT 1
 # include "ultragetopt.h"
 #endif
+
+#include "ultragetopt_behavior.h"
 
 /* https://ccodearchive.net/info/build_assert.html */
 #define BUILD_ASSERT_OR_ZERO(cond) (sizeof(char [1 - 2*!(cond)]) - 1)
@@ -36,9 +38,15 @@ static char *const CMDNAME = "cmd";
 static void setup(void) {
     opterr = 0;
     /* Glibc uses optind = 0 to reinitialize.
-     * Recent BSD libc supports it (older require optreset = 1).
+     * Recent OpenBSD libc supports it (older require optreset = 1).
+     * FreeBSD optind = 0 interprets argv[0] as first argument.
      */
+#if __GNU_LIBRARY__ || __GLIBC__
     optind = 0;
+#else
+    optind = 1;
+    optreset = 1;
+#endif
 }
 
 static void set_posixly_correct(void) {
@@ -474,6 +482,7 @@ Test(getopt, arg_before_option) {
     const char *optstring = "n";
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt(argc, argv, optstring), 'n');
     cr_expect_eq(optind, 3);
     cr_expect_eq(argv[1], orig_argv[1]);
@@ -484,6 +493,10 @@ Test(getopt, arg_before_option) {
     cr_expect_eq(argv[1], orig_argv[2]);
     cr_expect_eq(argv[2], orig_argv[1]);
     cr_expect_eq(argv[3], orig_argv[3]);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#endif
 }
 
 Test(getopt, arg_before_dashdash_option) {
@@ -499,11 +512,19 @@ Test(getopt, arg_before_dashdash_option) {
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
     cr_expect_eq(getopt(argc, argv, optstring), -1);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(optind, 2);
     cr_expect_eq(argv[0], orig_argv[0]);
     cr_expect_eq(argv[1], orig_argv[2]);
     cr_expect_eq(argv[2], orig_argv[1]);
     cr_expect_eq(argv[3], orig_argv[3]);
+#else
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(argv[0], orig_argv[0]);
+    cr_expect_eq(argv[1], orig_argv[1]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+    cr_expect_eq(argv[3], orig_argv[3]);
+#endif
 }
 
 Test(getopt, arg_before_option_dashdash) {
@@ -518,6 +539,7 @@ Test(getopt, arg_before_option_dashdash) {
     const char *optstring = "n";
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt(argc, argv, optstring), 'n');
     cr_expect_eq(optind, 3);
     cr_expect_eq(argv[1], orig_argv[1]);
@@ -529,6 +551,10 @@ Test(getopt, arg_before_option_dashdash) {
     cr_expect_eq(argv[2], orig_argv[3]);
     cr_expect_eq(argv[3], orig_argv[1]);
     cr_expect_eq(argv[4], orig_argv[4]);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#endif
 }
 
 Test(getopt, arg_before_option_nopremute) {
@@ -558,6 +584,7 @@ Test(getopt, arg_before_option_order) {
     const char *optstring = "-n";
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
@@ -566,6 +593,10 @@ Test(getopt, arg_before_option_order) {
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 3);
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#endif
 }
 
 Test(getopt, arg_before_option_posix, .init = set_posixly_correct,
