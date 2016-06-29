@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+set -eux
 
 # Remove the auto* files and get fresh copies
 rm -rf autom4te.cache build-aux
