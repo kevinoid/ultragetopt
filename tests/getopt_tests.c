@@ -41,7 +41,7 @@ static void setup(void) {
      * Recent OpenBSD libc supports it (older require optreset = 1).
      * FreeBSD optind = 0 interprets argv[0] as first argument.
      */
-#if __GNU_LIBRARY__ || __GLIBC__
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
     optind = 0;
 #else
     optind = 1;
