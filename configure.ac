@@ -4,6 +4,7 @@
 # Initialize and configure
 AC_INIT([ultragetopt], [0.6.2], [Kevin Locke <kevin@kevinlocke.name>])
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile tests/Makefile])

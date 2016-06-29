@@ -1,5 +1,7 @@
 # Makefile.am - Script used in combination with automake to produce Makefile.in
 
+ACLOCAL_AMFLAGS = --install -I m4
+
 AM_CFLAGS = $(WARN_CFLAGS)
 AM_LDFLAGS = $(WARN_LDFLAGS)
 
