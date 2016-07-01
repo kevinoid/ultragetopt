@@ -69,7 +69,7 @@ Test(getopt, name_noopts) {
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
-    const char *optstring = "n";
+    const char *optstring = "";
     cr_expect_eq(getopt(argc, argv, optstring), -1);
 }
 
