@@ -245,6 +245,51 @@ Test(getopt, assigned_optlike_reqoptarg) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt, spaced_reqoptarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "r:";
+    cr_expect_eq(getopt(argc, argv, optstring), 'r');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, spaced_empty_reqoptarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r ",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "r:";
+    cr_expect_eq(getopt(argc, argv, optstring), 'r');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, spaced_optlike_reqoptarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r -n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "nr:";
+    cr_expect_eq(getopt(argc, argv, optstring), 'r');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt, separate_optoptarg) {
     char * const argv[] = {
         CMDNAME,
