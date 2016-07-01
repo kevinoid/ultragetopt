@@ -173,7 +173,7 @@ Test(getopt, separate_reqoptarg_dash) {
 Test(getopt, combined_reqoptarg) {
     char * const argv[] = {
         CMDNAME,
-        "-roptarg",
+        "-rarg",
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -203,7 +203,7 @@ Test(getopt, combined_reqoptarg_dash) {
 Test(getopt, assigned_reqoptarg) {
     char * const argv[] = {
         CMDNAME,
-        "-r=optarg",
+        "-r=arg",
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -249,7 +249,7 @@ Test(getopt, separate_optoptarg) {
     char * const argv[] = {
         CMDNAME,
         "-o",
-        "optarg",
+        "arg",
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -264,7 +264,7 @@ Test(getopt, separate_optoptarg) {
 Test(getopt, combined_optoptarg) {
     char * const argv[] = {
         CMDNAME,
-        "-ooptarg",
+        "-oarg",
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -279,7 +279,7 @@ Test(getopt, combined_optoptarg) {
 Test(getopt, assigned_optoptarg) {
     char * const argv[] = {
         CMDNAME,
-        "-o=optarg",
+        "-o=arg",
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
