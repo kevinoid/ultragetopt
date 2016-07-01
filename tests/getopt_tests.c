@@ -502,6 +502,25 @@ Test(getopt, missing_optarg_dashdash) {
     cr_expect_eq(optind, 3);
 }
 
+Test(getopt, missing_optarg_dashdash_opt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r",
+        "--",
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = ":nr:";
+    cr_expect_eq(getopt(argc, argv, optstring), 'r');
+    cr_expect_eq(optarg, argv[2]);
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 4);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 4);
+}
+
 Test(getopt, arg_before_option) {
     char * const argv[] = {
         CMDNAME,
