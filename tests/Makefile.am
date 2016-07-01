@@ -14,14 +14,16 @@ TESTS = check_ultragetopt
 
 check_PROGRAMS = check_ultragetopt
 
-check_ultragetopt_SOURCES = getopt_tests.c getopt_long_tests.c ../ultragetopt.c
+TEST_SOURCES = getopt_tests.c getopt_long_tests.c getopt_long_only_tests.c
+
+check_ultragetopt_SOURCES = $(TEST_SOURCES) ../ultragetopt.c
 check_ultragetopt_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)
 check_ultragetopt_LDADD = -lcriterion
 
 if TEST_HOST_GETOPT
 TESTS += check_host_getopt
 check_PROGRAMS += check_host_getopt
-check_host_getopt_SOURCES = getopt_tests.c getopt_long_tests.c
+check_host_getopt_SOURCES = $(TEST_SOURCES)
 check_host_getopt_CPPFLAGS = $(AM_CPPFLAGS) \
 			     -I$(top_srcdir) \
 			     -DTEST_HOST_GETOPT=1 \
