@@ -6,9 +6,11 @@
 # Note:  Non-const argv makes const string literals very annoying for tests.
 #        Disable write-strings warning to avoid this annoyance.
 
-AM_CPPFLAGS = -D_FORTIFY_SOURCE=2
-AM_CFLAGS = $(HARDENING_CFLAGS) $(WARN_CFLAGS) -Wno-write-strings -Werror
-AM_LDFLAGS = $(WARN_LDFLAGS)
+AM_CPPFLAGS = $(CODE_COVERAGE_CPPFLAGS) -D_FORTIFY_SOURCE=2
+AM_CFLAGS = $(HARDENING_CFLAGS) \
+	    $(WARN_CFLAGS) -Wno-write-strings -Werror \
+	    $(CODE_COVERAGE_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS) $(CODE_COVERAGE_LDFLAGS)
 
 TESTS = check_ultragetopt
 
@@ -30,3 +32,5 @@ check_host_getopt_CPPFLAGS = $(AM_CPPFLAGS) \
 			     -DULTRAGETOPT_LIKE_$(HOST_GETOPT_BEHAVIOR)=1
 check_host_getopt_LDADD = -lcriterion
 endif
+
+@CODE_COVERAGE_RULES@

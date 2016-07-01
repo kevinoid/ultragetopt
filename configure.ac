@@ -74,4 +74,7 @@ AS_CASE([$host_os],
 AC_SUBST([HOST_GETOPT_BEHAVIOR])
 AM_CONDITIONAL([TEST_HOST_GETOPT], [test "x$HOST_GETOPT_BEHAVIOR" != "x"])
 
+# Support for code coverage checking
+AX_CODE_COVERAGE
+
 AC_OUTPUT

@@ -1,3 +1,5 @@
+*-coverage.info
+*-coverage/
 *.aps
 *.la
 *.lo
