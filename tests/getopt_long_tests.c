@@ -681,7 +681,6 @@ Test(getopt_long, arg_before_option) {
     };
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
-#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
     cr_expect_eq(optind, 3);
     cr_expect_eq(argv[1], orig_argv[1]);
@@ -692,10 +691,6 @@ Test(getopt_long, arg_before_option) {
     cr_expect_eq(argv[1], orig_argv[2]);
     cr_expect_eq(argv[2], orig_argv[1]);
     cr_expect_eq(argv[3], orig_argv[3]);
-#else
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
-    cr_expect_eq(optind, 1);
-#endif
 }
 
 Test(getopt_long, arg_before_dashdash_option) {
@@ -715,19 +710,11 @@ Test(getopt_long, arg_before_dashdash_option) {
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
-#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(optind, 2);
     cr_expect_eq(argv[0], orig_argv[0]);
     cr_expect_eq(argv[1], orig_argv[2]);
     cr_expect_eq(argv[2], orig_argv[1]);
     cr_expect_eq(argv[3], orig_argv[3]);
-#else
-    cr_expect_eq(optind, 1);
-    cr_expect_eq(argv[0], orig_argv[0]);
-    cr_expect_eq(argv[1], orig_argv[1]);
-    cr_expect_eq(argv[2], orig_argv[2]);
-    cr_expect_eq(argv[3], orig_argv[3]);
-#endif
 }
 
 Test(getopt_long, arg_before_option_dashdash) {
@@ -746,7 +733,6 @@ Test(getopt_long, arg_before_option_dashdash) {
     };
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
-#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
     cr_expect_eq(optind, 3);
     cr_expect_eq(argv[1], orig_argv[1]);
@@ -758,10 +744,6 @@ Test(getopt_long, arg_before_option_dashdash) {
     cr_expect_eq(argv[2], orig_argv[3]);
     cr_expect_eq(argv[3], orig_argv[1]);
     cr_expect_eq(argv[4], orig_argv[4]);
-#else
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
-    cr_expect_eq(optind, 1);
-#endif
 }
 
 Test(getopt_long, arg_before_option_nopremute) {
@@ -799,7 +781,6 @@ Test(getopt_long, arg_before_option_order) {
     };
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
-#ifdef ULTRAGETOPT_OPTIONPERMUTE
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
@@ -808,10 +789,6 @@ Test(getopt_long, arg_before_option_order) {
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 3);
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
-#else
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
-    cr_expect_eq(optind, 1);
-#endif
 }
 
 Test(getopt_long, arg_before_option_posix, .init = set_posixly_correct,
