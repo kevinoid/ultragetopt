@@ -26,9 +26,12 @@
  *				argument
  * ULTRAGETOPT_LONGOPTADJACENT	Accept adjacent arguments to long options
  *				(e.g. --optionarg) based on first longest-match
- * ULTRAGETOPT_OPTIONPERMUTE	Permute options, do not stop at first non-option
+ * ULTRAGETOPT_OPTIONPERMUTE	Permute options when calling getopt(3), do not
+ *				stop at first non-option.
  *				Behaves like GNU getopt where leading '+' or
  *				$POSIXLY_CORRECT both stop this @ runtime
+ *				Note:  Options are still permuted when calling
+ *				getopt_long(3) or getopt_long_only(3).
  * ULTRAGETOPT_SHORTOPTASSIGN	Support -o=file syntax for short options
  * ULTRAGETOPT_SEPARATEDOPTIONAL Accept separated optional arguments
  *				 Parse -o file as -o  with argument file
