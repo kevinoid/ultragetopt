@@ -43,6 +43,10 @@
  * ULTRAGETOPT_NO_OPTIONALARG	Do not support GNU "::" optional argument
  *				Always supported in *_long*()
  * ULTRAGETOPT_NO_OPTIONASSIGN	Do not support --option=value syntax
+ * ULTRAGETOPT_2CHAR_ARG_SHORT	When calling getopt_long_only, always interpret
+ *                              2-character arguments (e.g. "-r") for a valid
+ *                              short option as short options (default would be
+ *                              "r" long option).
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -56,6 +60,7 @@
 # undef ULTRAGETOPT_OPTIONPERMUTE
 # undef ULTRAGETOPT_SHORTOPTASSIGN
 #elif defined(ULTRAGETOPT_LIKE_GNU)
+# define ULTRAGETOPT_2CHAR_ARG_SHORT
 # define ULTRAGETOPT_GNU_ERRORS
 # define ULTRAGETOPT_HYPHENARG
 # define ULTRAGETOPT_OPTIONPERMUTE

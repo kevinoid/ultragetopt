@@ -34,6 +34,7 @@ extern "C" {
 #define UGO_LONGOPTADJACENT	0x400
 #define UGO_HYPHENARG		0x800
 #define UGO_SINGLELEADERONLY	0x1000
+#define UGO_2CHARARGSHORT	0x2000
 
 #ifndef required_argument
 # define no_argument 0

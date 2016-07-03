@@ -576,11 +576,18 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 			      longopts, indexptr, optleaders, flags);
     }
 
+    /* See if it matches a short option */
+    opt = argv[ultraoptind] + ultraoptnum + 1;
+    optpos = strchr(shortopts, opt[0]);
+
     /* See if it matches a long-only option */
     if (longopts != NULL &&
 	    ultraoptnum == 0 &&
 	    ((flags & UGO_SINGLELEADERLONG) ||
-	     (flags & UGO_SINGLELEADERONLY))) {
+	     (flags & UGO_SINGLELEADERONLY)) &&
+            (!(flags & UGO_2CHARARGSHORT) ||
+             optpos == NULL ||
+             opt[1] != '\0')) {
 	int longind;
 	char *longarg;
 
@@ -593,8 +600,6 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     }
 
     /* No long matches, process short option */
-    opt = argv[ultraoptind] + ultraoptnum + 1;
-    optpos = strchr(shortopts, opt[0]);
     if (optpos == NULL && (flags & UGO_CASEINSENSITIVE)) {
 	if (islower(opt[0]))
 	    optpos = strchr(shortopts, toupper(opt[0]));
@@ -725,10 +730,17 @@ int ultragetopt_long(int argc, char *const argv[], const char *shortopts,
 int ultragetopt_long_only(int argc, char *const argv[], const char *shortopts,
 			  const struct option *longopts, int *indexptr)
 {
+    int flags = getoptflags |
+                UGO_SINGLELEADERLONG |
+                UGO_OPTIONPERMUTE |
+                UGO_OPTIONALARG;
+
+#ifdef ULTRAGETOPT_2CHAR_ARG_SHORT
+    flags |= UGO_2CHARARGSHORT;
+#endif
+
     return ultragetopt_tunable(argc, argv, shortopts, longopts, indexptr,
-			       unixassigners, unixleaders,
-			       getoptflags | UGO_SINGLELEADERLONG
-			       | UGO_OPTIONPERMUTE | UGO_OPTIONALARG);
+			       unixassigners, unixleaders, flags);
 }
 
 int ultragetopt_dos(int argc, char * const argv[], const char *optstring)
