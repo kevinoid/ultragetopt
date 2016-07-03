@@ -52,6 +52,8 @@
  *				option and a valid short option, always
  *				interpret it as a short option (default "-r=a"
  *				would match a long option).
+ * ULTRAGETOPT_ALLOW_OPTIND0	Do not treat optind == 0 as special (default is
+ *				to reset the getopt state for optind == 0)
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -78,6 +80,7 @@
 # undef ULTRAGETOPT_LONGOPTADJACENT
 #elif defined(ULTRAGETOPT_LIKE_BSD)
 # define ULTRAGETOPT_1PREFIX_SHORT
+# define ULTRAGETOPT_ALLOW_OPTIND0
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_DEFAULTOPTOPT '?'
 # undef ULTRAGETOPT_ASSIGNSPACE

@@ -477,7 +477,8 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     int noseparg = 0;	/* Force option not to have a separate argument */
     static char *posixly_correct = NULL;	/* Cached $POSIXLY_CORRECT */
 
-    if (ultraoptreset) {
+    if (ultraoptreset ||
+            (ultraoptind == 0 && !(flags & UGO_ALLOWOPTIND0))) {
 	ultraoptind = 1;
 	ultraopterr = 1;
 	ultraoptnum = 0;

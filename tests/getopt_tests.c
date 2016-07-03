@@ -865,6 +865,76 @@ Test(getopt, equal_opt_assigned_optarg) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt, optind0_cmd) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    optind = 0;
+#if defined(ULTRAGETOPT_ALLOW_OPTIND0) && defined(ULTRAGETOPT_OPTIONPERMUTE)
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(argv[0], orig_argv[1]);
+    cr_expect_eq(argv[1], orig_argv[0]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+#elif defined(ULTRAGETOPT_ALLOW_OPTIND0)
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 0);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#endif
+}
+
+Test(getopt, optind0_dashcmd) {
+    char * const argv[] = {
+        /* Note:  This occurs for login shells. */
+        "-bash",
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    optind = 0;
+#ifdef ULTRAGETOPT_ALLOW_OPTIND0
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 0);
+    cr_expect_eq(optopt, 'b');
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 0);
+    cr_expect_eq(optopt, 'a');
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 0);
+    cr_expect_eq(optopt, 's');
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(optopt, 'h');
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+#endif
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
 /* Test parsing of examples from SUSv3 (POSIX) */
 
 Test(getopt, posix_example1_1) {
