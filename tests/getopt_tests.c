@@ -767,7 +767,7 @@ Test(getopt, plus_opt) {
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
-    /* Note:  optstring[0] == '+' requests permuting arguments for glibc */
+    /* Note:  optstring[0] == '+' requests not permuting arguments for glibc */
     const char *optstring = "n+";
     cr_expect_eq(getopt(argc, argv, optstring), '+');
     cr_expect_eq(optarg, NULL);
