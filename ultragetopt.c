@@ -147,7 +147,7 @@ static const char *const erroroptc =
 char *ultraoptarg = NULL;
 int ultraoptind = 1;
 int ultraopterr = 1;
-int ultraoptreset = 0;
+int ultraoptreset = 1;
 #ifdef ULTRAGETOPT_DEFAULTOPTOPT
 int ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT -0;
 #else
@@ -475,12 +475,14 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     char *opt;		/* Option we are processing */
     char *optpos;	/* Pointer to opt in shortopts */
     int noseparg = 0;	/* Force option not to have a separate argument */
+    static char *posixly_correct = NULL;	/* Cached $POSIXLY_CORRECT */
 
     if (ultraoptreset) {
 	ultraoptind = 1;
 	ultraopterr = 1;
 	ultraoptnum = 0;
 	ultraoptreset = 0;
+	posixly_correct = getenv("POSIXLY_CORRECT");
     }
 
     ultraoptarg = NULL;
@@ -494,7 +496,7 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	return -1;
 
     /* No permuting when $POSIXLY_CORRECT is set (to match GNU getopt) */
-    if (getenv("POSIXLY_CORRECT"))
+    if (posixly_correct != NULL)
 	flags &= ~UGO_OPTIONPERMUTE;
 
     /* Get flags from shortopts */
