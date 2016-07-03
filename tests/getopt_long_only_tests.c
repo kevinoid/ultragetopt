@@ -385,12 +385,11 @@ Test(getopt_long_only, short_matches_long_assign_badshort) {
         {0, 0, 0, 0}
     };
 #ifdef ULTRAGETOPT_1PREFIX_SHORT
-    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
-    cr_expect_eq(optopt, 'n');
-#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+#endif
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
     cr_expect_eq(optarg, argv[1] + 3);
-#endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
