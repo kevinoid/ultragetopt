@@ -594,7 +594,11 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	longind = match_longopt(ultraoptind, argv, longopts, assigners,
 				optleaders, flags, &longarg);
 
-	if (longind >= 0)
+	if (longind >= 0 &&
+                (optpos == NULL ||
+                 opt[1] != '\0' ||
+                 longopts[longind].name[1] == '\0' ||
+                 !(flags & UGO_1PREFIXSHORT)))
 	    return handle_longopt(longind, longarg, noseparg, argv,
 				  longopts, indexptr, optleaders, flags);
     }
@@ -737,6 +741,10 @@ int ultragetopt_long_only(int argc, char *const argv[], const char *shortopts,
 
 #ifdef ULTRAGETOPT_2CHAR_ARG_SHORT
     flags |= UGO_2CHARARGSHORT;
+#endif
+
+#ifdef ULTRAGETOPT_1PREFIX_SHORT
+    flags |= UGO_1PREFIXSHORT;
 #endif
 
     return ultragetopt_tunable(argc, argv, shortopts, longopts, indexptr,

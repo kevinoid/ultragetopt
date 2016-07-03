@@ -47,6 +47,11 @@
  *                              2-character arguments (e.g. "-r") for a valid
  *                              short option as short options (default would be
  *                              "r" long option).
+ * ULTRAGETOPT_1PREFIX_SHORT	When calling getopt_long_only and an argument
+ *				is both a 1-character proper prefix of a long
+ *				option and a valid short option, always
+ *				interpret it as a short option (default "-r=a"
+ *				would match a long option).
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -72,6 +77,7 @@
 # undef ULTRAGETOPT_SEPARATEOPTIONAL
 # undef ULTRAGETOPT_LONGOPTADJACENT
 #elif defined(ULTRAGETOPT_LIKE_BSD)
+# define ULTRAGETOPT_1PREFIX_SHORT
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_DEFAULTOPTOPT '?'
 # undef ULTRAGETOPT_ASSIGNSPACE
