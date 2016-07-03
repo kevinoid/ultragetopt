@@ -154,7 +154,7 @@ Test(getopt_long_only, same_short_long) {
         {"n", no_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#ifdef ULTRAGETOPT_2CHAR_ARG_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
 #else
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
@@ -176,7 +176,7 @@ Test(getopt_long_only, same_shortarg_long) {
         {"n", no_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#ifdef ULTRAGETOPT_2CHAR_ARG_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
 #else
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
@@ -198,7 +198,7 @@ Test(getopt_long_only, same_short_longarg) {
         {"n", required_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#ifdef ULTRAGETOPT_2CHAR_ARG_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
 #else
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
@@ -331,12 +331,12 @@ Test(getopt_long_only, short_matches_long_assign) {
         {"no", required_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
-    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
-    cr_expect_eq(optarg, argv[1] + 3);
-#else
+#ifdef ULTRAGETOPT_1PREFIX_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
     cr_expect_eq(optarg, argv[1] + 2);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optarg, argv[1] + 3);
 #endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
@@ -356,11 +356,11 @@ Test(getopt_long_only, short_ambig_match_long_assign) {
         {"na", required_argument, 0, 'A'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
-    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
-#else
+#ifdef ULTRAGETOPT_1PREFIX_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
     cr_expect_eq(optarg, argv[1] + 2);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
 #endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
@@ -379,11 +379,11 @@ Test(getopt_long_only, short_matches_long_assign_badshort) {
         {"no", required_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#ifdef ULTRAGETOPT_1PREFIX_SHORT
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#else
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
     cr_expect_eq(optarg, argv[1] + 3);
-#else
-    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
 #endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
@@ -402,11 +402,11 @@ Test(getopt_long_only, short_matches_long_assign_badlong) {
         {"no", no_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
-    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
-#else
+#ifdef ULTRAGETOPT_1PREFIX_SHORT
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
     cr_expect_eq(optarg, argv[1] + 2);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
 #endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
