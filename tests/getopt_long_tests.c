@@ -270,6 +270,7 @@ Test(getopt_long, combined_reqoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -288,6 +289,7 @@ Test(getopt_long, combined_reqoptarg_dash) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -363,6 +365,7 @@ Test(getopt_long, spaced_reqoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -381,6 +384,7 @@ Test(getopt_long, spaced_empty_reqoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -399,6 +403,7 @@ Test(getopt_long, spaced_optlike_reqoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -437,6 +442,7 @@ Test(getopt_long, combined_optoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -512,6 +518,7 @@ Test(getopt_long, assigned_nonoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 'N');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -530,6 +537,7 @@ Test(getopt_long, assigned_empty_nonoptarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 'N');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -860,6 +868,7 @@ Test(getopt_long, equalopt) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, '=');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -878,6 +887,7 @@ Test(getopt_long, equalequalopt) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, '=');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -951,6 +961,7 @@ Test(getopt_long, match_assign_noarg) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 'N');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1008,6 +1019,7 @@ Test(getopt_long, match_ambig) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1027,6 +1039,7 @@ Test(getopt_long, match_ambig_assign) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1046,6 +1059,7 @@ Test(getopt_long, nomatch) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1065,6 +1079,7 @@ Test(getopt_long, nomatch_assign) {
         {0, 0, 0, 0}
     };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
