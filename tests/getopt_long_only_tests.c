@@ -106,6 +106,24 @@ Test(getopt_long_only, onlyopt_match) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long_only, onlyopt_match1) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long_only, longopt_match) {
     char * const argv[] = {
         CMDNAME,
@@ -124,7 +142,7 @@ Test(getopt_long_only, longopt_match) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, ambigshort) {
+Test(getopt_long_only, same_short_long) {
     char * const argv[] = {
         CMDNAME,
         "-n",
@@ -136,13 +154,98 @@ Test(getopt_long_only, ambigshort) {
         {"n", no_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, same_shortarg_long) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n:";
+    const struct option longopts[] = {
+        {"n", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, same_short_longarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {"n", required_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_matches_long) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {"no", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, ambigshorts) {
+Test(getopt_long_only, short_ambig_match_long) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {"no", no_argument, 0, 'N'},
+        {"na", no_argument, 0, 'A'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, shorts_exact_long) {
     char * const argv[] = {
         CMDNAME,
         "-no",
@@ -160,7 +263,7 @@ Test(getopt_long_only, ambigshorts) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, ambigshortarg) {
+Test(getopt_long_only, shortarg_exact_long) {
     char * const argv[] = {
         CMDNAME,
         "-no",
@@ -178,7 +281,7 @@ Test(getopt_long_only, ambigshortarg) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, ambiglong) {
+Test(getopt_long_only, ambig_long) {
     char * const argv[] = {
         CMDNAME,
         "-no",
@@ -197,7 +300,26 @@ Test(getopt_long_only, ambiglong) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, ambigshortassign) {
+Test(getopt_long_only, same_short_long_assign) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n=o",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n:";
+    const struct option longopts[] = {
+        {"n", required_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optarg, argv[1] + 3);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_matches_long_assign) {
     char * const argv[] = {
         CMDNAME,
         "-n=o",
@@ -209,8 +331,83 @@ Test(getopt_long_only, ambigshortassign) {
         {"no", required_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
     cr_expect_eq(optarg, argv[1] + 3);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optarg, argv[1] + 2);
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_ambig_match_long_assign) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n=o",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n:";
+    const struct option longopts[] = {
+        {"no", required_argument, 0, 'N'},
+        {"na", required_argument, 0, 'A'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optarg, argv[1] + 2);
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_matches_long_assign_badshort) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n=o",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {"no", required_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optarg, argv[1] + 3);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#endif
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_matches_long_assign_badlong) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n=o",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n:";
+    const struct option longopts[] = {
+        {"no", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optarg, argv[1] + 2);
+#endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -292,7 +489,53 @@ Test(getopt_long_only, nomatch) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long_only, nomatch_short) {
+Test(getopt_long_only, shorts_nomatch_long) {
+    char * const argv[] = {
+        CMDNAME,
+        "-nob",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "bno";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'A'},
+        {"no", required_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'o');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'b');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, shorts_some_nomatch_long) {
+    char * const argv[] = {
+        CMDNAME,
+        "-nob",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "no";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'A'},
+        {"no", required_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'o');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, short_arg_nomatch_long) {
     char * const argv[] = {
         CMDNAME,
         "-nob",
