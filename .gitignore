@@ -6,6 +6,7 @@
 *.ncb
 *.o
 *.suo
+*.tar.*
 *.user
 *~
 .deps/
