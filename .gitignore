@@ -20,4 +20,5 @@ autom4te.cache/
 config.*
 configure
 libtool
+tests/*.log
 tests/check_*
