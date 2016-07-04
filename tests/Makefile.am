@@ -12,6 +12,9 @@ AM_CFLAGS = $(HARDENING_CFLAGS) \
 	    $(CODE_COVERAGE_CFLAGS)
 AM_LDFLAGS = $(WARN_LDFLAGS) $(CODE_COVERAGE_LDFLAGS)
 
+LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
+    $(top_srcdir)/build-aux/tap-driver.sh --comments --merge
+TESTS_ENVIRONMENT = CRITERION_OUTPUTS='tap:-'
 TESTS = check_ultragetopt
 
 check_PROGRAMS = check_ultragetopt

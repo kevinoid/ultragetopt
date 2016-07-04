@@ -9,6 +9,7 @@ AC_CONFIG_SRCDIR([ultragetopt.c])
 # AC_CONFIG_HEADER([src/config.h])
 AC_CONFIG_FILES([Makefile tests/Makefile])
 AM_INIT_AUTOMAKE([std-options subdir-objects])
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
 
 # Determine the host system (used for reference in tests)
 AC_CANONICAL_HOST
