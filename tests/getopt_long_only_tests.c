@@ -476,6 +476,26 @@ Test(getopt_long_only, bestlast) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long_only, shortlong) {
+    char * const argv[] = {
+        CMDNAME,
+        "-nno",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {"no", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long_only, nomatch) {
     char * const argv[] = {
         CMDNAME,
