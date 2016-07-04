@@ -935,6 +935,35 @@ Test(getopt, optind0_dashcmd) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
+Test(getopt, wsemi_noarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "W;";
+    cr_expect_eq(getopt(argc, argv, optstring), 'W');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, wsemi_arg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W",
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "W;";
+    cr_expect_eq(getopt(argc, argv, optstring), 'W');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
 /* Test parsing of examples from SUSv3 (POSIX) */
 
 Test(getopt, posix_example1_1) {

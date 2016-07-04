@@ -1080,7 +1080,249 @@ Test(getopt_long, nomatch_assign) {
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
     cr_expect_eq(optopt, 0);
+    cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_noarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {{0, 0, 0, 0}};
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'W');
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_arg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Warg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {{0, 0, 0, 0}};
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_separg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W",
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {{0, 0, 0, 0}};
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
+    cr_expect_eq(optarg, argv[2]);
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt_long, wsemi_opt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wopt",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"opt", no_argument, 0, 'O'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'O');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_sepopt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W",
+        "opt",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"opt", no_argument, 0, 'O'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'O');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt_long, wsemi_assignopt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-W=opt",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"opt", no_argument, 0, 'O'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_matchopt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wno",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_optarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wreq",
+        "optarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'R');
+    cr_expect_eq(optarg, argv[2]);
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt_long, wsemi_optarg_assign) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wreq=optarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'R');
+    cr_expect_eq(optarg, argv[1] + 6);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_missingoptarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wreq",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, wsemi_dashdashoptarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-Wreq",
+        "--",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'R');
+    cr_expect_eq(optarg, argv[2]);
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt_long, optwsemi) {
+    char * const argv[] = {
+        CMDNAME,
+        "-nWn",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "nW;";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, optwwsemi) {
+    char * const argv[] = {
+        CMDNAME,
+        "-nWWn",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "nW;";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
+    cr_expect_eq(optarg, argv[1] + 3);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
