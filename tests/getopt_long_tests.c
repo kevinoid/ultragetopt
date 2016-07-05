@@ -17,33 +17,10 @@
 #endif
 
 #include "array_size.h"
+#include "testlib.h"
 #include "ultragetopt_behavior.h"
 
-static char *const CMDNAME = "cmd";
-
-static void setup(void) {
-    opterr = 0;
-    /* Glibc uses optind = 0 to reinitialize.
-     * Recent OpenBSD libc supports it (older require optreset = 1).
-     * FreeBSD optind = 0 interprets argv[0] as first argument.
-     */
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
-    optind = 0;
-#else
-    optind = 1;
-    optreset = 1;
-#endif
-}
-
-static void set_posixly_correct(void) {
-    setenv("POSIXLY_CORRECT", "1", 1);
-}
-
-static void unset_posixly_correct(void) {
-    unsetenv("POSIXLY_CORRECT");
-}
-
-TestSuite(getopt_long, .init = setup);
+TestSuite(getopt_long, .init = reset_getopt);
 
 Test(getopt_long, noname_noopts) {
     char * const argv[] = {

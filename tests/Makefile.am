@@ -22,7 +22,9 @@ check_PROGRAMS = check_ultragetopt
 TEST_SOURCES = array_size.h \
 	       getopt_tests.c \
 	       getopt_long_tests.c \
-	       getopt_long_only_tests.c
+	       getopt_long_only_tests.c \
+	       testlib.c \
+	       testlib.h
 
 check_ultragetopt_SOURCES = $(TEST_SOURCES) ../ultragetopt.c
 check_ultragetopt_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)
