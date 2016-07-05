@@ -58,6 +58,8 @@
  *				shortopts and the argument does not match any
  *				long options, return it as the argument to the
  *				'W' short option.
+ * ULTRAGETOPT_OPTOPT_0_IF_FLAG	Set optopt to 0 when a long option with a flag
+ *                              has an argument error (default sets to val).
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -88,6 +90,7 @@
 # define ULTRAGETOPT_ALLOW_OPTIND0
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_DEFAULTOPTOPT '?'
+# define ULTRAGETOPT_OPTOPT_0_IF_FLAG
 # undef ULTRAGETOPT_ASSIGNSPACE
 # undef ULTRAGETOPT_NO_OPTIONALARG
 # undef ULTRAGETOPT_NO_OPTIONASSIGN

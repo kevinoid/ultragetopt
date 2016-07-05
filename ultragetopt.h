@@ -38,6 +38,7 @@ extern "C" {
 #define UGO_1PREFIXSHORT	0x4000
 #define UGO_ALLOWOPTIND0	0x8000
 #define UGO_NOMATCHWASARG	0x10000
+#define UGO_OPTOPT0IFFLAG	0x20000
 
 #ifndef required_argument
 # define no_argument 0

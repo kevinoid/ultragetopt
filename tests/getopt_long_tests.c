@@ -630,6 +630,31 @@ Test(getopt_long, missing_optarg_colon) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long, missing_optarg_flag) {
+    char * const argv[] = {
+        CMDNAME,
+        "--reqarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    int flag = 0;
+    const struct option longopts[] = {
+        {"reqarg", required_argument, &flag, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(flag, 0);
+    cr_expect_eq(optind, 2);
+#ifdef ULTRAGETOPT_OPTOPT_0_IF_FLAG
+    cr_expect_eq(optopt, 0);
+#else
+    cr_expect_eq(optopt, 'R');
+#endif
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long, missing_optarg_dashdash) {
     char * const argv[] = {
         CMDNAME,
