@@ -1125,6 +1125,140 @@ Test(getopt_long, nomatch_assign) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long, respect_argc_nocmd) {
+    char * const argv[] = {
+        CMDNAME,
+        "--noarg",
+        NULL
+    };
+    int argc = 0;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    /* glibc sets optind == 0, BSD sets optind == 1
+     * This is enough of a corner-case that ultragetopt behavior is unspecified.
+     */
+    cr_expect(optind == 0 || optind == 1);
+}
+
+Test(getopt_long, respect_argc_noargs) {
+    char * const argv[] = {
+        CMDNAME,
+        "--noarg",
+        NULL
+    };
+    int argc = 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt_long, respect_argc_opt) {
+    char * const argv[] = {
+        CMDNAME,
+        "--noarg",
+        "--reqarg",
+        "optarg",
+        NULL
+    };
+    int argc = 2;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, respect_argc_optarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "--reqarg",
+        "optarg",
+        NULL
+    };
+    int argc = 2;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'R');
+#else
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'R');
+    cr_expect_eq(optarg, argv[2]);
+    cr_expect_eq(optind, 3);
+#endif
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(optind, 2);
+#else
+    cr_expect_eq(optind, 3);
+#endif
+}
+
+Test(getopt_long, respect_argc_nopermute) {
+    char * const argv[] = {
+        CMDNAME,
+        "arg",
+        "--noarg",
+        NULL
+    };
+    int argc = 2;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt_long, respect_argc_permute) {
+    char * const argv[] = {
+        CMDNAME,
+        "arg",
+        "--noarg",
+        "--noarg",
+        NULL
+    };
+    int argc = 3;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(argv[1], orig_argv[1]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(argv[0], orig_argv[0]);
+    cr_expect_eq(argv[1], orig_argv[2]);
+    cr_expect_eq(argv[2], orig_argv[1]);
+    cr_expect_eq(argv[3], orig_argv[3]);
+}
+
 Test(getopt_long, wsemi_noarg) {
     char * const argv[] = {
         CMDNAME,

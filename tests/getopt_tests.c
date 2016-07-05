@@ -912,6 +912,111 @@ Test(getopt, optind0_dashcmd) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
+Test(getopt, respect_argc_nocmd) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = 0;
+    const char *optstring = "n:";
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    /* glibc sets optind == 0, BSD sets optind == 1
+     * This is enough of a corner-case that ultragetopt behavior is unspecified.
+     */
+    cr_expect(optind == 0 || optind == 1);
+}
+
+Test(getopt, respect_argc_noargs) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = 1;
+    const char *optstring = "n:";
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt, respect_argc_opt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-n",
+        "-r",
+        "optarg",
+        NULL
+    };
+    int argc = 2;
+    const char *optstring = "nr:";
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, respect_argc_optarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r",
+        "optarg",
+        NULL
+    };
+    int argc = 2;
+    const char *optstring = "r:";
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'r');
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, respect_argc_nopermute) {
+    char * const argv[] = {
+        CMDNAME,
+        "arg",
+        "-n",
+        NULL
+    };
+    int argc = 2;
+    const char *optstring = "n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt, respect_argc_permute) {
+    char * const argv[] = {
+        CMDNAME,
+        "arg",
+        "-n",
+        "-n",
+        NULL
+    };
+    int argc = 3;
+    const char *optstring = "n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(argv[1], orig_argv[1]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(argv[0], orig_argv[0]);
+    cr_expect_eq(argv[1], orig_argv[2]);
+    cr_expect_eq(argv[2], orig_argv[1]);
+    cr_expect_eq(argv[3], orig_argv[3]);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#endif
+}
+
 Test(getopt, wsemi_noarg) {
     char * const argv[] = {
         CMDNAME,
