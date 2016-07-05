@@ -1182,6 +1182,26 @@ Test(getopt_long, wsemi_sepopt) {
     cr_expect_eq(optind, 3);
 }
 
+/* Note:  Choice of 'V' is arbitrary.  Just checking how non-W is handled. */
+Test(getopt_long, vsemi_sepopt) {
+    char * const argv[] = {
+        CMDNAME,
+        "-V",
+        "opt",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "V;";
+    const struct option longopts[] = {
+        {"opt", no_argument, 0, 'O'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'V');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long, wsemi_assignopt) {
     char * const argv[] = {
         CMDNAME,

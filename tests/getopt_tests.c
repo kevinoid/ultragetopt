@@ -964,6 +964,36 @@ Test(getopt, wsemi_arg) {
     cr_expect_eq(optind, 2);
 }
 
+/* Note:  Choice of 'V' is arbitrary.  Just checking how non-W is handled. */
+Test(getopt, vsemi_noarg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-V",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "V;";
+    cr_expect_eq(getopt(argc, argv, optstring), 'V');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, vsemi_arg) {
+    char * const argv[] = {
+        CMDNAME,
+        "-V",
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "V;";
+    cr_expect_eq(getopt(argc, argv, optstring), 'V');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
 /* Test parsing of examples from SUSv3 (POSIX) */
 
 Test(getopt, posix_example1_1) {
