@@ -637,8 +637,13 @@ Test(getopt_long_only, ambigwsemi_arg) {
         {"W", required_argument, 0, 'V'},
         {0, 0, 0, 0}
     };
+#ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'W');
     cr_expect_eq(optarg, argv[1] + 2);
+#else
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+#endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);

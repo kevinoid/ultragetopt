@@ -1110,8 +1110,13 @@ Test(getopt_long, wsemi_arg) {
     int argc = ARRAY_SIZE(argv) - 1;
     const char *shortopts = "W;";
     const struct option longopts[] = {{0, 0, 0, 0}};
+#ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
     cr_expect_eq(optarg, argv[1] + 2);
+#else
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+#endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1127,9 +1132,15 @@ Test(getopt_long, wsemi_separg) {
     int argc = ARRAY_SIZE(argv) - 1;
     const char *shortopts = "W;";
     const struct option longopts[] = {{0, 0, 0, 0}};
+#ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
     cr_expect_eq(optarg, argv[2]);
     cr_expect_eq(optind, 3);
+#else
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 0);
+#endif
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 3);
 }
@@ -1183,10 +1194,19 @@ Test(getopt_long, wsemi_assignopt) {
         {"opt", no_argument, 0, 'O'},
         {0, 0, 0, 0}
     };
+    /* Note:  The glibc behavior appears to match everything, so having
+     * multiple long options results in "ambiguous match".  Having one long
+     * option without argument causes "wrong argument" due to presence of "=".
+     */
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
-    cr_expect_eq(optarg, argv[1] + 2);
     cr_expect_eq(optind, 2);
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    cr_expect_eq(optarg, argv[1] + 2);
     cr_expect_eq(optopt, 0);
+#else
+    cr_expect_eq(optarg, NULL);
+    cr_expect_eq(optopt, 'O');
+#endif
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
 }
@@ -1262,7 +1282,11 @@ Test(getopt_long, wsemi_missingoptarg) {
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
     cr_expect_eq(optind, 2);
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
     cr_expect_eq(optopt, 0);
+#else
+    cr_expect_eq(optopt, 'R');
+#endif
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
 }
@@ -1321,8 +1345,13 @@ Test(getopt_long, optwwsemi) {
     };
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'n');
     cr_expect_eq(optind, 1);
+#ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
     cr_expect_eq(optarg, argv[1] + 3);
+#else
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+#endif
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);

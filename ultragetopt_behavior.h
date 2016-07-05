@@ -54,6 +54,10 @@
  *				would match a long option).
  * ULTRAGETOPT_ALLOW_OPTIND0	Do not treat optind == 0 as special (default is
  *				to reset the getopt state for optind == 0)
+ * ULTRAGETOPT_NOMATCH_W_AS_ARG	When handling -W specially due to "W;" in
+ *				shortopts and the argument does not match any
+ *				long options, return it as the argument to the
+ *				'W' short option.
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -70,6 +74,7 @@
 # define ULTRAGETOPT_2CHAR_ARG_SHORT
 # define ULTRAGETOPT_GNU_ERRORS
 # define ULTRAGETOPT_HYPHENARG
+# define ULTRAGETOPT_NOMATCH_W_AS_ARG
 # define ULTRAGETOPT_OPTIONPERMUTE
 # undef ULTRAGETOPT_ASSIGNSPACE
 # undef ULTRAGETOPT_NO_OPTIONALARG
