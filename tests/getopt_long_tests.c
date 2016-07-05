@@ -199,6 +199,44 @@ Test(getopt_long, optflag) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long, noindex) {
+    char * const argv[] = {
+        CMDNAME,
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    int index = 10;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), -1);
+    cr_expect_eq(index, 10);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt_long, index) {
+    char * const argv[] = {
+        CMDNAME,
+        "--noarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    int index = 10;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), 'N');
+    cr_expect_eq(index, 0);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long, shortopt) {
     char * const argv[] = {
         CMDNAME,
@@ -1135,13 +1173,15 @@ Test(getopt_long, wsemi_arg) {
     int argc = ARRAY_SIZE(argv) - 1;
     const char *shortopts = "W;";
     const struct option longopts[] = {{0, 0, 0, 0}};
+    int index = 10;
 #ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), 'W');
     cr_expect_eq(optarg, argv[1] + 2);
 #else
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), '?');
     cr_expect_eq(optopt, 0);
 #endif
+    cr_expect_eq(index, 10);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1182,7 +1222,9 @@ Test(getopt_long, wsemi_opt) {
         {"opt", no_argument, 0, 'O'},
         {0, 0, 0, 0}
     };
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'O');
+    int index = 10;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), 'O');
+    cr_expect_eq(index, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
@@ -1201,7 +1243,9 @@ Test(getopt_long, wsemi_sepopt) {
         {"opt", no_argument, 0, 'O'},
         {0, 0, 0, 0}
     };
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'O');
+    int index = 10;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), 'O');
+    cr_expect_eq(index, 0);
     cr_expect_eq(optind, 3);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 3);
@@ -1268,7 +1312,9 @@ Test(getopt_long, wsemi_matchopt) {
         {"noarg", no_argument, 0, 'N'},
         {0, 0, 0, 0}
     };
-    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    int index = 10;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, &index), 'N');
+    cr_expect_eq(index, 0);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
