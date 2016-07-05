@@ -456,7 +456,7 @@ Test(getopt, missing_optarg_colon) {
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = ":r:";
     cr_expect_eq(getopt(argc, argv, optstring), ':');
-    /* As in missing_optarg:  POSIX specifies 3, glibc sets 2 */
+    /* As in missing_optarg:  POSIX specifies 3, everyone sets 2 */
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 'r');
     cr_expect_eq(getopt(argc, argv, optstring), -1);
