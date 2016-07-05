@@ -523,6 +523,7 @@ Test(getopt, arg_before_option) {
 #else
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 #endif
 }
 
