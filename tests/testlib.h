@@ -9,6 +9,16 @@ extern "C" {
 
 #define CMDNAME "testcmd"
 
+/* Asserts that a string is equal to the result of string formatting on the
+ * remaining arguments. */
+#define cr_expect_str_eqf(actual, ...)                                        \
+    do {                                                                      \
+        char *cr_fmt_expected = NULL;                                         \
+        cr_asprintf(&cr_fmt_expected, __VA_ARGS__);                           \
+        cr_expect_str_eq(actual, cr_fmt_expected);                            \
+        if (cr_fmt_expected) free(cr_fmt_expected);                           \
+    } while (0)
+
 void reset_getopt(void);
 
 void set_posixly_correct(void);
