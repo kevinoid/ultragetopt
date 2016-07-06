@@ -20,6 +20,12 @@
 #include "testlib.h"
 #include "ultragetopt_behavior.h"
 
+#ifdef ULTRAGETOPT_ERROR_PROGNAME
+# define ERR_PROGNAME ULTRAGETOPT_ERROR_PROGNAME
+#else
+# define ERR_PROGNAME argv[0]
+#endif
+
 TestSuite(getopt, .init = reset_getopt);
 
 Test(getopt, noname_noopts) {
@@ -1072,6 +1078,138 @@ Test(getopt, vsemi_arg) {
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "V;";
     cr_expect_eq(getopt(argc, argv, optstring), 'V');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, msg_invalid_opt, .init = init_capture, .fini = fini_capture) {
+    char * const argv[] = {
+        CMDNAME,
+        "-a",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "";
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 2);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: invalid option -- 'a'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: illegal option -- a\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: unknown option -- a\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, msg_missing_arg, .init = init_capture, .fini = fini_capture) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "r:";
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'r');
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- 'r'\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- r\n",
+            ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- r\n",
+            ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, msg_none_opterr, .init = init_capture, .fini = fini_capture) {
+    char * const argv[] = {
+        CMDNAME,
+        "-a",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "";
+    char *buf;
+    size_t bufsize;
+    opterr = 0;
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 2);
+    buf = read_capture_str_stderr(&bufsize);
+    cr_expect_str_eq(buf, "");
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, msg_none_colon, .init = init_capture, .fini = fini_capture) {
+    char * const argv[] = {
+        CMDNAME,
+        "-r",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = ":r:";
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt(argc, argv, optstring), ':');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'r');
+    buf = read_capture_str_stderr(&bufsize);
+    cr_expect_str_eq(buf, "");
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, msg_longopt, .init = init_capture, .fini = fini_capture) {
+    char * const argv[] = {
+        CMDNAME,
+        "--n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "n";
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(optopt, '-');
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: invalid option -- '-'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: illegal option -- -\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: unknown option -- -\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 2);
