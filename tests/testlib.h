@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-extern char *const CMDNAME;
+#define CMDNAME "testcmd"
 
 void reset_getopt(void);
 

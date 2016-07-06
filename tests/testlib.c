@@ -18,7 +18,6 @@
 
 #include <stdlib.h>
 
-char *const CMDNAME = "testcmd";
 
 void reset_getopt(void) {
     opterr = 0;
