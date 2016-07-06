@@ -14,6 +14,12 @@ AC_REQUIRE_AUX_FILE([tap-driver.sh])
 # Determine the host system (used for reference in tests)
 AC_CANONICAL_HOST
 
+# Support for code coverage checking
+# Disable default optimizations added by AC_PROG_CC when CFLAGS is unset
+# Note:  Must occur before AC_PROG_CC so that we can set CFLAGS
+AX_CODE_COVERAGE
+AS_IF([test x$enable_code_coverage = xyes], [: ${CFLAGS=""}])
+
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_AR
@@ -74,8 +80,5 @@ AS_CASE([$host_os],
 	AC_MSG_WARN([Unrecognized host system.  Not checking system getopt.]))
 AC_SUBST([HOST_GETOPT_BEHAVIOR])
 AM_CONDITIONAL([TEST_HOST_GETOPT], [test "x$HOST_GETOPT_BEHAVIOR" != "x"])
-
-# Support for code coverage checking
-AX_CODE_COVERAGE
 
 AC_OUTPUT
