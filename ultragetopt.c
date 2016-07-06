@@ -143,6 +143,12 @@ static const char *const erroroptc =
     "%s: illegal option -- %c\n";
 #endif
 
+#ifdef ULTRAGETOPT_ERROR_PROGNAME
+# define ERR_PROGNAME ULTRAGETOPT_ERROR_PROGNAME
+#else
+# define ERR_PROGNAME argv[0]
+#endif
+
 /* Globals to match optarg, optind, opterr, optopt, optreset */
 char *ultraoptarg = NULL;
 int ultraoptind = 1;
@@ -407,7 +413,7 @@ static int handle_longopt(int longind, char *longarg, int noseparg,
 {
     /* Handle assignment arguments */
     if (longarg && longopts[longind].has_arg == no_argument) {
-	print_error(flags, errorarg, argv[0],
+	print_error(flags, errorarg, ERR_PROGNAME,
 		    (int)(longarg-argv[ultraoptind]-1), argv[ultraoptind]);
 	/* TODO:  What is a good value to put in ultraoptopt? */
 	/* Looks like GNU getopt() uses val */
@@ -434,7 +440,7 @@ static int handle_longopt(int longind, char *longarg, int noseparg,
 	    || !like_optarg(argv[ultraoptind+1],
 		    optleaders,
 		    flags & UGO_HYPHENARG))) {
-	print_error(flags, errornoarg, argv[0],
+	print_error(flags, errornoarg, ERR_PROGNAME,
 		    (int)strlen(argv[ultraoptind]), argv[ultraoptind]);
 	ultraoptind++;
 	if (flags & UGO_MISSINGCOLON)
@@ -561,10 +567,10 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 				optleaders, flags, &longarg);
 	if (longind < 0) {
 	    if (longarg == NULL)
-		print_error(flags, erroropt, argv[0],
+		print_error(flags, erroropt, ERR_PROGNAME,
 			    (int)strlen(argv[ultraoptind]), argv[ultraoptind]);
 	    else
-		print_error(flags, erroropt, argv[0],
+		print_error(flags, erroropt, ERR_PROGNAME,
 			    (int)(longarg - argv[ultraoptind] - 1),
 			    argv[ultraoptind]);
 
@@ -619,7 +625,7 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 
     /* Check for invalid or unrecognized option */
     if (optpos == NULL || opt[0] == ':') {
-	print_error(flags, erroroptc, argv[0], opt[0]);
+	print_error(flags, erroroptc, ERR_PROGNAME, opt[0]);
 
 	ultraoptopt = opt[0];
 	if (opt[1] != '\0')
@@ -665,7 +671,7 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 		    optleaders,
 		    (flags & UGO_HYPHENARG))) {
 	    ultraoptind++;
-	    print_error(flags, errornoargc, argv[0], opt[0]);
+	    print_error(flags, errornoargc, ERR_PROGNAME, opt[0]);
 
 	    ultraoptopt = opt[0];
 	    if (flags & UGO_MISSINGCOLON)
@@ -682,7 +688,7 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     /* Handle argumentless option with assigned option */
     if ((flags & UGO_SHORTOPTASSIGN)
 	&& opt[1] != '\0' && strchr(assigners, opt[1])) {
-	print_error(flags, errorargc, argv[0], opt[0]);
+	print_error(flags, errorargc, ERR_PROGNAME, opt[0]);
 	ultraoptnum = 0;
 	ultraoptopt = opt[0];
 	ultraoptind++;

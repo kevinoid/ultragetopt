@@ -15,6 +15,9 @@
  * ULTRAGETOPT_LIKE_GNU		Behave like GNU getopt()
  * ULTRAGETOPT_LIKE_POSIX   	Behave like POSIX definition of getopt()
  *
+ * ULTRAGETOPT_ERROR_PROGNAME	Program name to use in error messages
+ *				(default is argv[0] passed to getopt).
+ *
  * ULTRAGETOPT_ASSIGNSPACE	Parse "-o value" as "value" rather than " value"
  *				Note: Only applicable when argv[x] == "-o value"
  *				      Not for argv[x] == "-o" [x+1] == "value"
@@ -90,6 +93,7 @@
 # define ULTRAGETOPT_ALLOW_OPTIND0
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_DEFAULTOPTOPT '?'
+# define ULTRAGETOPT_ERROR_PROGNAME getprogname()
 # define ULTRAGETOPT_OPTOPT_0_IF_FLAG
 # undef ULTRAGETOPT_ASSIGNSPACE
 # undef ULTRAGETOPT_NO_OPTIONALARG
