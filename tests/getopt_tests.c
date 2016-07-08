@@ -29,7 +29,7 @@
 TestSuite(getopt, .init = reset_getopt);
 
 Test(getopt, noname_noopts) {
-    char * const argv[] = {
+    char *argv[] = {
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -38,7 +38,7 @@ Test(getopt, noname_noopts) {
 }
 
 Test(getopt, noname_opts) {
-    char * const argv[] = {
+    char *argv[] = {
         NULL
     };
     int argc = ARRAY_SIZE(argv) - 1;
@@ -47,7 +47,7 @@ Test(getopt, noname_opts) {
 }
 
 Test(getopt, name_noopts) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         NULL
     };
@@ -57,7 +57,7 @@ Test(getopt, name_noopts) {
 }
 
 Test(getopt, name_opts) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         NULL
     };
@@ -67,7 +67,7 @@ Test(getopt, name_opts) {
 }
 
 Test(getopt, arg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg"
     };
@@ -78,7 +78,7 @@ Test(getopt, arg) {
 }
 
 Test(getopt, arg_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-",
         NULL
@@ -90,7 +90,7 @@ Test(getopt, arg_dash) {
 }
 
 Test(getopt, arg_dashdashdash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "---",
         NULL
@@ -108,7 +108,7 @@ Test(getopt, arg_dashdashdash) {
 }
 
 Test(getopt, opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -122,7 +122,7 @@ Test(getopt, opt) {
 }
 
 Test(getopt, separate_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         "optarg",
@@ -138,7 +138,7 @@ Test(getopt, separate_reqoptarg) {
 }
 
 Test(getopt, separate_reqoptarg_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         "-",
@@ -154,7 +154,7 @@ Test(getopt, separate_reqoptarg_dash) {
 }
 
 Test(getopt, combined_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-rarg",
         NULL
@@ -169,7 +169,7 @@ Test(getopt, combined_reqoptarg) {
 }
 
 Test(getopt, combined_reqoptarg_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r-",
         NULL
@@ -184,7 +184,7 @@ Test(getopt, combined_reqoptarg_dash) {
 }
 
 Test(getopt, assigned_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r=arg",
         NULL
@@ -199,7 +199,7 @@ Test(getopt, assigned_reqoptarg) {
 }
 
 Test(getopt, assigned_empty_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r=",
         NULL
@@ -214,7 +214,7 @@ Test(getopt, assigned_empty_reqoptarg) {
 }
 
 Test(getopt, assigned_optlike_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r=-n",
         NULL
@@ -229,7 +229,7 @@ Test(getopt, assigned_optlike_reqoptarg) {
 }
 
 Test(getopt, spaced_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r arg",
         NULL
@@ -244,7 +244,7 @@ Test(getopt, spaced_reqoptarg) {
 }
 
 Test(getopt, spaced_empty_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r ",
         NULL
@@ -259,7 +259,7 @@ Test(getopt, spaced_empty_reqoptarg) {
 }
 
 Test(getopt, spaced_optlike_reqoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r -n",
         NULL
@@ -274,7 +274,7 @@ Test(getopt, spaced_optlike_reqoptarg) {
 }
 
 Test(getopt, separate_optoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-o",
         "arg",
@@ -290,7 +290,7 @@ Test(getopt, separate_optoptarg) {
 }
 
 Test(getopt, combined_optoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-oarg",
         NULL
@@ -305,7 +305,7 @@ Test(getopt, combined_optoptarg) {
 }
 
 Test(getopt, assigned_optoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-o=arg",
         NULL
@@ -320,7 +320,7 @@ Test(getopt, assigned_optoptarg) {
 }
 
 Test(getopt, assigned_empty_optoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-o=",
         NULL
@@ -335,7 +335,7 @@ Test(getopt, assigned_empty_optoptarg) {
 }
 
 Test(getopt, assigned_optlike_optoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-o=-n",
         NULL
@@ -350,7 +350,7 @@ Test(getopt, assigned_optlike_optoptarg) {
 }
 
 Test(getopt, assigned_nonoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -371,7 +371,7 @@ Test(getopt, assigned_nonoptarg) {
 }
 
 Test(getopt, assigned_empty_nonoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=",
         NULL
@@ -389,7 +389,7 @@ Test(getopt, assigned_empty_nonoptarg) {
 }
 
 Test(getopt, dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-",
         NULL
@@ -402,7 +402,7 @@ Test(getopt, dash) {
 }
 
 Test(getopt, dashdash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--",
         NULL
@@ -415,7 +415,7 @@ Test(getopt, dashdash) {
 }
 
 Test(getopt, dashdash_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--",
         "-n",
@@ -429,7 +429,7 @@ Test(getopt, dashdash_opt) {
 }
 
 Test(getopt, missing_optarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         NULL
@@ -454,7 +454,7 @@ Test(getopt, missing_optarg) {
 }
 
 Test(getopt, missing_optarg_colon) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         NULL
@@ -470,7 +470,7 @@ Test(getopt, missing_optarg_colon) {
 }
 
 Test(getopt, missing_optarg_dashdash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         "--",
@@ -486,7 +486,7 @@ Test(getopt, missing_optarg_dashdash) {
 }
 
 Test(getopt, missing_optarg_dashdash_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         "--",
@@ -505,7 +505,7 @@ Test(getopt, missing_optarg_dashdash_opt) {
 }
 
 Test(getopt, arg_before_option) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -534,7 +534,7 @@ Test(getopt, arg_before_option) {
 }
 
 Test(getopt, arg_before_dashdash_option) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "--",
@@ -562,7 +562,7 @@ Test(getopt, arg_before_dashdash_option) {
 }
 
 Test(getopt, arg_before_option_dashdash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -592,7 +592,7 @@ Test(getopt, arg_before_option_dashdash) {
 }
 
 Test(getopt, arg_before_option_nopremute) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -608,7 +608,7 @@ Test(getopt, arg_before_option_nopremute) {
 }
 
 Test(getopt, arg_before_option_order) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -635,7 +635,7 @@ Test(getopt, arg_before_option_order) {
 
 Test(getopt, arg_before_option_posix, .init = set_posixly_correct,
         .fini = unset_posixly_correct) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -651,7 +651,7 @@ Test(getopt, arg_before_option_posix, .init = set_posixly_correct,
 }
 
 Test(getopt, adjacent_nooptarg_with_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n-n",
         NULL
@@ -670,7 +670,7 @@ Test(getopt, adjacent_nooptarg_with_dash) {
 }
 
 Test(getopt, adjacent_optoptarg_with_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-o-o",
         NULL
@@ -685,7 +685,7 @@ Test(getopt, adjacent_optoptarg_with_dash) {
 }
 
 Test(getopt, adjacent_reqoptarg_with_dash) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r-r",
         NULL
@@ -700,7 +700,7 @@ Test(getopt, adjacent_reqoptarg_with_dash) {
 }
 
 Test(getopt, triplecolon) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-:",
         NULL
@@ -715,7 +715,7 @@ Test(getopt, triplecolon) {
 }
 
 Test(getopt, colon_optstring) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-:",
         NULL
@@ -730,7 +730,7 @@ Test(getopt, colon_optstring) {
 }
 
 Test(getopt, doublecolon_optstring) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-:",
         NULL
@@ -745,7 +745,7 @@ Test(getopt, doublecolon_optstring) {
 }
 
 Test(getopt, plus_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-+",
         NULL
@@ -761,7 +761,7 @@ Test(getopt, plus_opt) {
 }
 
 Test(getopt, dashdash_as_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--",
         NULL
@@ -773,7 +773,7 @@ Test(getopt, dashdash_as_opt) {
 }
 
 Test(getopt, dashdashopt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--n",
         NULL
@@ -790,7 +790,7 @@ Test(getopt, dashdashopt) {
 }
 
 Test(getopt, dashdashoptarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--n",
         NULL
@@ -805,7 +805,7 @@ Test(getopt, dashdashoptarg) {
 }
 
 Test(getopt, equal_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-=",
         NULL
@@ -820,7 +820,7 @@ Test(getopt, equal_opt) {
 }
 
 Test(getopt, equal_opt_assigned_empty_optarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-==",
         NULL
@@ -835,7 +835,7 @@ Test(getopt, equal_opt_assigned_empty_optarg) {
 }
 
 Test(getopt, equal_opt_assigned_optarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-===",
         NULL
@@ -850,7 +850,7 @@ Test(getopt, equal_opt_assigned_optarg) {
 }
 
 Test(getopt, optind0_cmd) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -882,7 +882,7 @@ Test(getopt, optind0_cmd) {
 }
 
 Test(getopt, optind0_dashcmd) {
-    char * const argv[] = {
+    char *argv[] = {
         /* Note:  This occurs for login shells. */
         "-bash",
         "-n",
@@ -920,7 +920,7 @@ Test(getopt, optind0_dashcmd) {
 }
 
 Test(getopt, respect_argc_nocmd) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -935,7 +935,7 @@ Test(getopt, respect_argc_nocmd) {
 }
 
 Test(getopt, respect_argc_noargs) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -947,7 +947,7 @@ Test(getopt, respect_argc_noargs) {
 }
 
 Test(getopt, respect_argc_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         "-r",
@@ -963,7 +963,7 @@ Test(getopt, respect_argc_opt) {
 }
 
 Test(getopt, respect_argc_optarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         "optarg",
@@ -979,7 +979,7 @@ Test(getopt, respect_argc_optarg) {
 }
 
 Test(getopt, respect_argc_nopermute) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -995,7 +995,7 @@ Test(getopt, respect_argc_nopermute) {
 }
 
 Test(getopt, respect_argc_permute) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "arg",
         "-n",
@@ -1025,7 +1025,7 @@ Test(getopt, respect_argc_permute) {
 }
 
 Test(getopt, wsemi_noarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-W",
         NULL
@@ -1039,7 +1039,7 @@ Test(getopt, wsemi_noarg) {
 }
 
 Test(getopt, wsemi_arg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-W",
         "arg",
@@ -1055,7 +1055,7 @@ Test(getopt, wsemi_arg) {
 
 /* Note:  Choice of 'V' is arbitrary.  Just checking how non-W is handled. */
 Test(getopt, vsemi_noarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-V",
         NULL
@@ -1069,7 +1069,7 @@ Test(getopt, vsemi_noarg) {
 }
 
 Test(getopt, vsemi_arg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-V",
         "arg",
@@ -1084,7 +1084,7 @@ Test(getopt, vsemi_arg) {
 }
 
 Test(getopt, msg_invalid_opt, .init = init_capture, .fini = fini_capture) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-a",
         NULL
@@ -1111,7 +1111,7 @@ Test(getopt, msg_invalid_opt, .init = init_capture, .fini = fini_capture) {
 }
 
 Test(getopt, msg_missing_arg, .init = init_capture, .fini = fini_capture) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         NULL
@@ -1142,7 +1142,7 @@ Test(getopt, msg_missing_arg, .init = init_capture, .fini = fini_capture) {
 }
 
 Test(getopt, msg_none_opterr, .init = init_capture, .fini = fini_capture) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-a",
         NULL
@@ -1164,7 +1164,7 @@ Test(getopt, msg_none_opterr, .init = init_capture, .fini = fini_capture) {
 }
 
 Test(getopt, msg_none_colon, .init = init_capture, .fini = fini_capture) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-r",
         NULL
@@ -1186,7 +1186,7 @@ Test(getopt, msg_none_colon, .init = init_capture, .fini = fini_capture) {
 }
 
 Test(getopt, msg_longopt, .init = init_capture, .fini = fini_capture) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--n",
         NULL
@@ -1218,7 +1218,7 @@ Test(getopt, msg_longopt, .init = init_capture, .fini = fini_capture) {
 /* Test parsing of examples from SUSv3 (POSIX) */
 
 Test(getopt, posix_example1_1) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-ao",
         "arg",
@@ -1238,7 +1238,7 @@ Test(getopt, posix_example1_1) {
 }
 
 Test(getopt, posix_example1_2) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-a",
         "-o",
@@ -1261,7 +1261,7 @@ Test(getopt, posix_example1_2) {
 /* Note:  Third sub-example has different option order.  Skip it. */
 
 Test(getopt, posix_example1_4) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-a",
         "-o",
@@ -1283,7 +1283,7 @@ Test(getopt, posix_example1_4) {
 }
 
 Test(getopt, posix_example1_5) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-a",
         "-oarg",
@@ -1303,7 +1303,7 @@ Test(getopt, posix_example1_5) {
 }
 
 Test(getopt, posix_example1_6) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-aoarg",
         "path",

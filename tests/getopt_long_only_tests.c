@@ -23,7 +23,7 @@
 TestSuite(getopt_long_only, .init = reset_getopt);
 
 Test(getopt_long_only, shortopt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -38,7 +38,7 @@ Test(getopt_long_only, shortopt) {
 }
 
 Test(getopt_long_only, longopt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--no",
         NULL
@@ -56,7 +56,7 @@ Test(getopt_long_only, longopt) {
 }
 
 Test(getopt_long_only, onlyopt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -74,7 +74,7 @@ Test(getopt_long_only, onlyopt) {
 }
 
 Test(getopt_long_only, onlyopt_match) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -92,7 +92,7 @@ Test(getopt_long_only, onlyopt_match) {
 }
 
 Test(getopt_long_only, onlyopt_match1) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -110,7 +110,7 @@ Test(getopt_long_only, onlyopt_match1) {
 }
 
 Test(getopt_long_only, longopt_match) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "--no",
         NULL
@@ -128,7 +128,7 @@ Test(getopt_long_only, longopt_match) {
 }
 
 Test(getopt_long_only, same_short_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -150,7 +150,7 @@ Test(getopt_long_only, same_short_long) {
 }
 
 Test(getopt_long_only, same_shortarg_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -173,7 +173,7 @@ Test(getopt_long_only, same_shortarg_long) {
 }
 
 Test(getopt_long_only, same_short_longarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -196,7 +196,7 @@ Test(getopt_long_only, same_short_longarg) {
 }
 
 Test(getopt_long_only, short_matches_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -214,7 +214,7 @@ Test(getopt_long_only, short_matches_long) {
 }
 
 Test(getopt_long_only, short_ambig_match_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n",
         NULL
@@ -233,7 +233,7 @@ Test(getopt_long_only, short_ambig_match_long) {
 }
 
 Test(getopt_long_only, shorts_exact_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -251,7 +251,7 @@ Test(getopt_long_only, shorts_exact_long) {
 }
 
 Test(getopt_long_only, shortarg_exact_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -270,7 +270,7 @@ Test(getopt_long_only, shortarg_exact_long) {
 }
 
 Test(getopt_long_only, ambig_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -290,7 +290,7 @@ Test(getopt_long_only, ambig_long) {
 }
 
 Test(getopt_long_only, same_short_long_assign) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -309,7 +309,7 @@ Test(getopt_long_only, same_short_long_assign) {
 }
 
 Test(getopt_long_only, short_matches_long_assign) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -333,7 +333,7 @@ Test(getopt_long_only, short_matches_long_assign) {
 }
 
 Test(getopt_long_only, short_ambig_match_long_assign) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -358,7 +358,7 @@ Test(getopt_long_only, short_ambig_match_long_assign) {
 }
 
 Test(getopt_long_only, short_matches_long_assign_badshort) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -381,7 +381,7 @@ Test(getopt_long_only, short_matches_long_assign_badshort) {
 }
 
 Test(getopt_long_only, short_matches_long_assign_badlong) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-n=o",
         NULL
@@ -405,7 +405,7 @@ Test(getopt_long_only, short_matches_long_assign_badlong) {
 }
 
 Test(getopt_long_only, longestonly) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-noarg",
         NULL
@@ -424,7 +424,7 @@ Test(getopt_long_only, longestonly) {
 }
 
 Test(getopt_long_only, bestfirst) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -443,7 +443,7 @@ Test(getopt_long_only, bestfirst) {
 }
 
 Test(getopt_long_only, bestlast) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-no",
         NULL
@@ -462,7 +462,7 @@ Test(getopt_long_only, bestlast) {
 }
 
 Test(getopt_long_only, shortlong) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nno",
         NULL
@@ -482,7 +482,7 @@ Test(getopt_long_only, shortlong) {
 }
 
 Test(getopt_long_only, nomatch) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nob",
         NULL
@@ -502,7 +502,7 @@ Test(getopt_long_only, nomatch) {
 }
 
 Test(getopt_long_only, shorts_nomatch_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nob",
         NULL
@@ -525,7 +525,7 @@ Test(getopt_long_only, shorts_nomatch_long) {
 }
 
 Test(getopt_long_only, shorts_some_nomatch_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nob",
         NULL
@@ -549,7 +549,7 @@ Test(getopt_long_only, shorts_some_nomatch_long) {
 }
 
 Test(getopt_long_only, short_arg_nomatch_long) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nob",
         NULL
@@ -569,7 +569,7 @@ Test(getopt_long_only, short_arg_nomatch_long) {
 }
 
 Test(getopt_long_only, nomatch_short_assign) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-nob=arg",
         NULL
@@ -589,7 +589,7 @@ Test(getopt_long_only, nomatch_short_assign) {
 }
 
 Test(getopt_long_only, ambigwsemi_noarg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-W",
         NULL
@@ -611,7 +611,7 @@ Test(getopt_long_only, ambigwsemi_noarg) {
 }
 
 Test(getopt_long_only, ambigwsemi_arg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-Warg",
         NULL
@@ -635,7 +635,7 @@ Test(getopt_long_only, ambigwsemi_arg) {
 }
 
 Test(getopt_long_only, ambigwsemi_separg) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-W",
         "arg",
@@ -659,7 +659,7 @@ Test(getopt_long_only, ambigwsemi_separg) {
 }
 
 Test(getopt_long_only, ambigwsemi_opt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-Wopt",
         NULL
@@ -678,7 +678,7 @@ Test(getopt_long_only, ambigwsemi_opt) {
 }
 
 Test(getopt_long_only, ambigwsemi_assignopt) {
-    char * const argv[] = {
+    char *argv[] = {
         CMDNAME,
         "-W=opt",
         NULL
