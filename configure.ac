@@ -57,6 +57,13 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
 		   -Wunsafe-loop-optimizations \
 		   -pedantic])
 
+# Check for sanitizer support for tests
+m4_foreach_w([sanitizer_type], [address undefined],
+	     [AX_CHECK_COMPILE_FLAG([-fsanitize=]sanitizer_type,
+				    [SANITIZE_]sanitizer_type[=yes],
+				    [SANITIZE_]sanitizer_type[=no])
+	     AM_CONDITIONAL([SANITIZE_]translit(sanitizer_type, 'a-z', 'A-Z'),[test "x$SANITIZE_]sanitizer_type[" = xyes])])
+
 # Checks for libraries.
 
 # Checks for library functions.
