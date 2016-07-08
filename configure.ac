@@ -92,7 +92,11 @@ AC_CHECK_FUNCS([strncasecmp _strnicmp], [break])
 
 # pkg-config support is currently added but unreleased
 # PKG_CHECK_MODULES([CRITERION], [criterion])
-AC_CHECK_LIB([criterion], [criterion_initialize])
+AC_CHECK_LIB([criterion],
+	     [criterion_initialize],
+	     [AX_APPEND_FLAG([-lcriterion], [TEST_LIBS])],
+	     [AC_MSG_WARN([libcriterion not found.  Testing not supported.])])
+AC_SUBST([TEST_LIBS])
 
 # Checks for system getopt behavior
 HOST_GETOPT_BEHAVIOR=""

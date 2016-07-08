@@ -34,7 +34,7 @@ TEST_HOST_CPPFLAGS = $(TEST_CPPFLAGS) \
 check_ultragetopt_SOURCES = $(TEST_SOURCES) ../ultragetopt.c
 check_ultragetopt_CPPFLAGS = $(TEST_CPPFLAGS) -D_FORTIFY_SOURCE=2
 check_ultragetopt_CFLAGS = $(AM_CFLAGS)
-check_ultragetopt_LDADD = -lcriterion
+check_ultragetopt_LDADD = $(TEST_LIBS)
 
 if TEST_HOST_GETOPT
 TESTS += check_host_getopt
@@ -42,7 +42,7 @@ check_PROGRAMS += check_host_getopt
 check_host_getopt_SOURCES = $(TEST_SOURCES)
 check_host_getopt_CPPFLAGS = $(TEST_HOST_CPPFLAGS) -D_FORTIFY_SOURCE=2
 check_host_getopt_CFLAGS = $(AM_CFLAGS)
-check_host_getopt_LDADD = -lcriterion
+check_host_getopt_LDADD = $(TEST_LIBS)
 endif
 
 # FIXME:  Declarations for sanitizer versions seem redundant and error-prone
