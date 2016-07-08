@@ -58,10 +58,13 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
 		   -pedantic])
 
 # Check for sanitizer support for tests
+# Note:  FreeBSD 10.3 ships clang 3.4.1 without sanitizers
+#        -fsanitize=* works for compile but causes link errors
+#        AX_CHECK_COMPILE_FLAG passes, AX_CHECK_LINK_FLAG fails
 m4_foreach_w([sanitizer_type], [address undefined],
-	     [AX_CHECK_COMPILE_FLAG([-fsanitize=]sanitizer_type,
-				    [SANITIZE_]sanitizer_type[=yes],
-				    [SANITIZE_]sanitizer_type[=no])
+	     [AX_CHECK_LINK_FLAG([-fsanitize=]sanitizer_type,
+				 [SANITIZE_]sanitizer_type[=yes],
+				 [SANITIZE_]sanitizer_type[=no])
 	     AM_CONDITIONAL([SANITIZE_]translit(sanitizer_type, 'a-z', 'A-Z'),[test "x$SANITIZE_]sanitizer_type[" = xyes])])
 
 # Check support for additional debugging flags
