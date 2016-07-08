@@ -181,7 +181,7 @@ static void print_error(int flags, const char *template, ...)
 }
 
 /* Check if an argument string looks like an option string */
-static inline int like_option(const char *arg, const char *optleaders)
+static int like_option(const char *arg, const char *optleaders)
 {
     return arg != NULL &&
 	arg[0] != '\0' &&			/* >= 2 characters long */
@@ -191,7 +191,7 @@ static inline int like_option(const char *arg, const char *optleaders)
 }
 
 /* Check if an argument string looks like the option terminator string */
-static inline int like_optterm(const char *arg, const char *optleaders)
+static int like_optterm(const char *arg, const char *optleaders)
 {
     return arg != NULL &&
 	arg[0] != '\0' &&
@@ -202,7 +202,7 @@ static inline int like_optterm(const char *arg, const char *optleaders)
 }
 
 /* Check if an argument string looks like an option argument string */
-static inline int like_optarg(const char *arg, const char *optleaders,
+static int like_optarg(const char *arg, const char *optleaders,
 			      int allow_option)
 {
     return arg != NULL &&
