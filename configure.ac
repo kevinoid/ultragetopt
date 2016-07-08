@@ -66,8 +66,8 @@ m4_foreach_w([sanitizer_type], [address undefined],
 				 [SANITIZE_]sanitizer_type[=yes],
 				 [SANITIZE_]sanitizer_type[=no],
 				 [],
-				 # Use clock() to prevent optimizing out
-				 # possibly-undefined arithmetic for UBSan
+				 dnl Use clock() to prevent optimizing out
+				 dnl possibly-undefined arithmetic for UBSan
 				 [AC_LANG_PROGRAM([#include <time.h>],
 					  [if (1 / (clock() % 3)) return 1;])])
 	     AM_CONDITIONAL([SANITIZE_]translit(sanitizer_type, 'a-z', 'A-Z'),[test "x$SANITIZE_]sanitizer_type[" = xyes])])
