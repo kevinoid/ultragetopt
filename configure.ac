@@ -64,6 +64,14 @@ m4_foreach_w([sanitizer_type], [address undefined],
 				    [SANITIZE_]sanitizer_type[=no])
 	     AM_CONDITIONAL([SANITIZE_]translit(sanitizer_type, 'a-z', 'A-Z'),[test "x$SANITIZE_]sanitizer_type[" = xyes])])
 
+# Check support for additional debugging flags
+# -fno-omit-frame-pointer for better backtraces in ASan and debugger
+# -fno-common so ASan can instrument global variables (and to check for redefs)
+m4_foreach_w([debug_flag], [-fno-omit-frame-pointer -fno-common],
+	     [AX_CHECK_COMPILE_FLAG(debug_flag,
+	      [AX_APPEND_FLAG(debug_flag, [DEBUG_CFLAGS])])])
+AC_SUBST([DEBUG_CFLAGS])
+
 # Checks for libraries.
 
 # Checks for library functions.
