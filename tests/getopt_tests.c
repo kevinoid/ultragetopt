@@ -637,6 +637,165 @@ Test(getopt, arg_before_option_nopremute) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
+Test(getopt, arg_before_option_colon_nopremute) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "-r",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = ":+r:";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_OPTIONPERMUTE
+    // + is not respected if it is not first
+    cr_expect_eq(getopt(argc, argv, optstring), ':');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 'r');
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(argv[0], orig_argv[0]);
+    cr_expect_eq(argv[1], orig_argv[2]);
+    cr_expect_eq(argv[2], orig_argv[1]);
+#else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    optind = 2;
+    cr_expect_eq(getopt(argc, argv, optstring), ':');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 'r');
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#endif
+}
+
+Test(getopt, arg_before_option_nopermute_colon) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "-r",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "+:r:";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    optind = 2;
+    // : is still respected if not first
+    cr_expect_eq(getopt(argc, argv, optstring), ':');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 'r');
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 3);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt, order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "-";
+    cr_expect_eq(getopt(argc, argv, optstring), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt, dashdash_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg1",
+        "--",
+        "arg2",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "-";
+    cr_expect_eq(getopt(argc, argv, optstring), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt, colon_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = ":-";
+    // - is not respected if not first
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt, order_colon) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "-r",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "-:r:";
+    cr_expect_eq(getopt(argc, argv, optstring), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    // : is still respected if not first
+    cr_expect_eq(getopt(argc, argv, optstring), ':');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 'r');
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt, arg_before_option_order_nopremute) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "-+n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    // Respect - and not +
+    memcpy(orig_argv, argv, sizeof argv);
+    cr_expect_eq(getopt(argc, argv, optstring), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 3);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt, arg_before_option_nopermute_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "+-n";
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    // Respect + and not -
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
 Test(getopt, arg_before_option_order) {
     char *argv[] = {
         CMDNAME,
