@@ -149,16 +149,16 @@ static const char *const erroroptc =
 # define ERR_PROGNAME argv[0]
 #endif
 
+#ifndef ULTRAGETOPT_DEFAULTOPTOPT
+# define ULTRAGETOPT_DEFAULTOPTOPT 0
+#endif
+
 /* Globals to match optarg, optind, opterr, optopt, optreset */
 char *ultraoptarg = NULL;
 int ultraoptind = 1;
 int ultraopterr = 1;
 int ultraoptreset = 1;
-#ifdef ULTRAGETOPT_DEFAULTOPTOPT
-int ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT -0;
-#else
-int ultraoptopt = 0;
-#endif
+int ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT;
 
 static int ultraoptnum = 0; /* How many options of the current multi-option
 			       argument have been processed?  (e.g. -vvv) */
@@ -493,9 +493,7 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
     }
 
     ultraoptarg = NULL;
-#ifdef ULTRAGETOPT_DEFAULTOPTOPT
-    ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT -0;
-#endif
+    ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT;
 
     /* Sanity check (These are specified verbatim in SUS) */
     if (ultraoptind > argc
