@@ -820,6 +820,84 @@ Test(getopt_long, arg_before_option_nopremute) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
+Test(getopt_long, order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "-";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, dashdash_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg1",
+        "--",
+        "arg2",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "-";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
+Test(getopt_long, colon_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = ":-";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    // - is not respected if not first
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt_long, order_colon) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "--reqarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "-:";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    // : is still respected if not first
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), ':');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(optopt, 'R');
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+}
+
 Test(getopt_long, arg_before_option_order) {
     char *argv[] = {
         CMDNAME,
@@ -842,6 +920,53 @@ Test(getopt_long, arg_before_option_order) {
     cr_expect_eq(optind, 3);
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 3);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt_long, arg_before_option_order_nopermute) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "--noarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "-+";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    // Respect - and not +
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
+    cr_expect_eq(optarg, argv[1]);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 3);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+}
+
+Test(getopt_long, arg_before_option_nopermute_order) {
+    char *argv[] = {
+        CMDNAME,
+        "arg",
+        "--noarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "+-";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *orig_argv[ARRAY_SIZE(argv)];
+    memcpy(orig_argv, argv, sizeof argv);
+    // Respect + and not -
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 1);
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
