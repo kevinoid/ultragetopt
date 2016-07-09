@@ -20,6 +20,12 @@
 #include "testlib.h"
 #include "ultragetopt_behavior.h"
 
+#ifdef ULTRAGETOPT_ERROR_PROGNAME
+# define ERR_PROGNAME ULTRAGETOPT_ERROR_PROGNAME
+#else
+# define ERR_PROGNAME argv[0]
+#endif
+
 TestSuite(getopt_long, .init = reset_getopt);
 
 Test(getopt_long, noname_noopts) {
@@ -1555,6 +1561,329 @@ Test(getopt_long, optwwsemi) {
     cr_expect_eq(optopt, 0);
 #endif
     cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_invalid_shortopt,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'n');
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: invalid option -- 'n'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: unknown option -- -n\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: illegal option -- -n\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_invalid_longopt,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "--noarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: unrecognized option '--noarg'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: unknown option -- --noarg\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: illegal option -- --noarg\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_invalid_wsemi,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "-Wnoarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+#ifdef ULTRAGETOPT_NOMATCH_W_AS_ARG
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'W');
+    cr_expect_eq(optarg, argv[1] + 2);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+#else
+    char *buf;
+    size_t bufsize;
+
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: unrecognized option '-W noarg'\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: unknown option -- -W noarg\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: illegal option -- -W noarg\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+#endif
+
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_ambig,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "--no",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noa", no_argument, 0, 'A'},
+        {"nob", no_argument, 0, 'B'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '--no' is ambiguous; possibilities:"
+            " '--noa' '--nob'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `--no' is ambiguous\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- --no\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_ambig_wsemi,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "-Wno",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"noa", no_argument, 0, 'A'},
+        {"nob", no_argument, 0, 'B'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+    optind = 2; /* https://sourceware.org/bugzilla/show_bug.cgi?id=20342 */
+#else
+    cr_expect_eq(optind, 2);
+#endif
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '-W no' is ambiguous\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `-W no' is ambiguous\n", ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- -W no\n", ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_noarg,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "--noarg=arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'N');
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '--noarg' doesn't allow an argument\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `--noarg' doesn't allow an argument\n",
+            ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: option does not take an argument -- --noarg\n",
+            ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_noarg_wsemi,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "-Wnoarg=arg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '-W noarg' doesn't allow an argument\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `-W noarg' doesn't allow an argument\n",
+            ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: option does not take an argument -- -W noarg\n",
+            ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_reqarg,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "--reqarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 'R');
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '--reqarg' requires an argument\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `--reqarg' requires an argument\n",
+            ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- --reqarg\n";
+            ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, msg_reqarg_wsemi,
+        .init = init_capture, .fini = fini_capture) {
+    char *argv[] = {
+        CMDNAME,
+        "-Wreqarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "W;";
+    const struct option longopts[] = {
+        {"reqarg", required_argument, 0, 'R'},
+        {0, 0, 0, 0}
+    };
+    char *buf;
+    size_t bufsize;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, 0);
+    buf = read_capture_str_stderr(&bufsize);
+#ifdef ULTRAGETOPT_GNU_ERRORS
+    cr_expect_str_eqf(buf, "%s: option '-W reqarg' requires an argument\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option `-W reqarg' requires an argument\n",
+            ERR_PROGNAME);
+#else
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- -W reqarg\n";
+            ERR_PROGNAME);
+#endif
+    if (buf) {
+        free(buf);
+    }
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
     cr_expect_eq(optind, 2);
 }
