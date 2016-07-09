@@ -501,6 +501,62 @@ Test(getopt_long_only, nomatch) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long_only, nomatch_nolong) {
+    char *argv[] = {
+        CMDNAME,
+        "-no",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, nomatch_nolong_short) {
+    char *argv[] = {
+        CMDNAME,
+        "-no",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "n";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long_only, nomatch_nolong_short2) {
+    char *argv[] = {
+        CMDNAME,
+        "-no",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "o";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), '?');
+    cr_expect_eq(optopt, 0);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long_only(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
 Test(getopt_long_only, shorts_nomatch_long) {
     char *argv[] = {
         CMDNAME,
