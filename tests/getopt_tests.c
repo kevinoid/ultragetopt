@@ -388,6 +388,36 @@ Test(getopt, assigned_empty_nonoptarg) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt, default_optarg) {
+    char *argv[] = {
+        CMDNAME,
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "";
+    optarg = "test";
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optarg, NULL);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt, default_optopt) {
+    char *argv[] = {
+        CMDNAME,
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "";
+    optopt = 1;
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#ifdef ULTRAGETOPT_DEFAULTOPTOPT
+    cr_expect_eq(optopt, ULTRAGETOPT_DEFAULTOPTOPT);
+#else
+    cr_expect_eq(optopt, 0);
+#endif
+}
+
 Test(getopt, dash) {
     char *argv[] = {
         CMDNAME,
