@@ -66,6 +66,10 @@
  *				'W' short option.
  * ULTRAGETOPT_OPTOPT_0_IF_FLAG	Set optopt to 0 when a long option with a flag
  *                              has an argument error (default sets to val).
+ * ULTRAGETOPT_COLON_FIRST_ONLY	Only recognize ':' when it is optstring[0] and
+ *				not when it appears after other modifiers ('-'
+ *				or '+') in optstring for getopt (always
+ *				recognized after others in getopt_long)
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -98,6 +102,7 @@
 # define ULTRAGETOPT_ALLOW_OPTIND0
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_ERROR_PROGNAME getprogname()
+# define ULTRAGETOPT_COLON_FIRST_ONLY
 # define ULTRAGETOPT_NO_DEFAULT_OPTARG
 # define ULTRAGETOPT_OPTOPT_0_IF_FLAG
 # undef ULTRAGETOPT_ASSIGNSPACE

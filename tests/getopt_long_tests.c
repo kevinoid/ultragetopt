@@ -948,7 +948,6 @@ Test(getopt_long, allargs_colon) {
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
-    // : is still respected if not first
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), ':');
     cr_expect_eq(optind, 3);
     cr_expect_eq(optopt, 'R');

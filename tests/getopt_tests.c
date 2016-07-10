@@ -705,8 +705,11 @@ Test(getopt, arg_before_option_nopermute_colon) {
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 1);
     optind = 2;
-    // : is still respected if not first
+#ifdef ULTRAGETOPT_COLON_FIRST_ONLY
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+#else
     cr_expect_eq(getopt(argc, argv, optstring), ':');
+#endif
     cr_expect_eq(optind, 3);
     cr_expect_eq(optopt, 'r');
     cr_expect_eq(getopt(argc, argv, optstring), -1);
@@ -771,8 +774,11 @@ Test(getopt, allargs_colon) {
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
-    // : is still respected if not first
+#ifdef ULTRAGETOPT_COLON_FIRST_ONLY
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+#else
     cr_expect_eq(getopt(argc, argv, optstring), ':');
+#endif
     cr_expect_eq(optind, 3);
     cr_expect_eq(optopt, 'r');
     cr_expect_eq(getopt(argc, argv, optstring), -1);
