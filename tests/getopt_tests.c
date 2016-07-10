@@ -398,10 +398,10 @@ Test(getopt, default_optarg) {
     char *testoptarg = "test";
     optarg = testoptarg;
     cr_expect_eq(getopt(argc, argv, optstring), -1);
-#ifdef ULTRAGETOPT_DEFAULTOPTARG
-    cr_expect_eq(optarg, ULTRAGETOPT_DEFAULTOPTARG);
-#else
+#ifdef ULTRAGETOPT_NO_DEFAULT_OPTARG
     cr_expect_eq(optarg, testoptarg);
+#else
+    cr_expect_eq(optarg, NULL);
 #endif
     cr_expect_eq(optind, 1);
 }
@@ -429,13 +429,14 @@ Test(getopt, default_optopt) {
     };
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "";
-    optopt = 1;
+    int testoptopt = 1;
+    optopt = testoptopt;
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 1);
-#ifdef ULTRAGETOPT_DEFAULTOPTOPT
-    cr_expect_eq(optopt, ULTRAGETOPT_DEFAULTOPTOPT);
+#ifdef ULTRAGETOPT_DEFAULT_OPTOPT
+    cr_expect_eq(optopt, ULTRAGETOPT_DEFAULT_OPTOPT);
 #else
-    cr_expect_eq(optopt, 0);
+    cr_expect_eq(optopt, testoptopt);
 #endif
 }
 

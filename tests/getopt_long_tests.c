@@ -564,6 +564,64 @@ Test(getopt_long, assigned_empty_nonoptarg) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt_long, default_optarg) {
+    char *argv[] = {
+        CMDNAME,
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {0, 0, 0, 0}
+    };
+    optarg = "test";
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optarg, NULL);
+    cr_expect_eq(optind, 1);
+}
+
+Test(getopt_long, default_optarg_withopt) {
+    char *argv[] = {
+        CMDNAME,
+        "--noarg",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    optarg = "test";
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), 'N');
+    cr_expect_eq(optarg, NULL);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 2);
+}
+
+Test(getopt_long, default_optopt) {
+    char *argv[] = {
+        CMDNAME,
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *shortopts = "";
+    const struct option longopts[] = {
+        {"noarg", no_argument, 0, 'N'},
+        {0, 0, 0, 0}
+    };
+    int testoptopt = 1;
+    optopt = testoptopt;
+    cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), -1);
+    cr_expect_eq(optind, 1);
+#ifdef ULTRAGETOPT_DEFAULT_OPTOPT
+    cr_expect_eq(optopt, ULTRAGETOPT_DEFAULT_OPTOPT);
+#else
+    cr_expect_eq(optopt, testoptopt);
+#endif
+}
+
 Test(getopt_long, dash) {
     char *argv[] = {
         CMDNAME,

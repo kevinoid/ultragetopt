@@ -21,10 +21,11 @@
  * ULTRAGETOPT_ASSIGNSPACE	Parse "-o value" as "value" rather than " value"
  *				Note: Only applicable when argv[x] == "-o value"
  *				      Not for argv[x] == "-o" [x+1] == "value"
- * ULTRAGETOPT_DEFAULTOPTARG	Set optarg to this value by default on each
- *				call to getopt()
- * ULTRAGETOPT_DEFAULTOPTOPT	Set optopt to this value by default on each
- *				call to getopt()
+ * ULTRAGETOPT_NO_DEFAULT_OPTARG	Do not set optarg to NULL by default
+ *				when calling getopt (Note:  Still set NULL for
+ *				getopt_long and getopt_long_only)
+ * ULTRAGETOPT_DEFAULT_OPTOPT	Set optopt to this value by default on each
+ *				call to getopt, getopt_long, or getopt_long_only
  * ULTRAGETOPT_HYPHENARG	Accept -option -arg as -option with argument
  *				"-arg" rather than -option missing argument
  *				Note:  A single "-" is always accepted as an
@@ -79,7 +80,8 @@
 # undef ULTRAGETOPT_SHORTOPTASSIGN
 #elif defined(ULTRAGETOPT_LIKE_GNU)
 # define ULTRAGETOPT_2CHAR_ARG_SHORT
-# define ULTRAGETOPT_DEFAULTOPTARG NULL
+# define ULTRAGETOPT_DEFAULT_OPTARG NULL
+# define ULTRAGETOPT_DEFAULT_OPTOPT 0
 # define ULTRAGETOPT_GNU_ERRORS
 # define ULTRAGETOPT_HYPHENARG
 # define ULTRAGETOPT_NOMATCH_W_AS_ARG
@@ -95,8 +97,8 @@
 # define ULTRAGETOPT_1PREFIX_SHORT
 # define ULTRAGETOPT_ALLOW_OPTIND0
 # define ULTRAGETOPT_BSD_ERRORS
-# define ULTRAGETOPT_DEFAULTOPTOPT '?'
 # define ULTRAGETOPT_ERROR_PROGNAME getprogname()
+# define ULTRAGETOPT_NO_DEFAULT_OPTARG
 # define ULTRAGETOPT_OPTOPT_0_IF_FLAG
 # undef ULTRAGETOPT_ASSIGNSPACE
 # undef ULTRAGETOPT_NO_OPTIONALARG

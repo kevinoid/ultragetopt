@@ -149,16 +149,12 @@ static const char *const erroroptc =
 # define ERR_PROGNAME argv[0]
 #endif
 
-#ifndef ULTRAGETOPT_DEFAULTOPTOPT
-# define ULTRAGETOPT_DEFAULTOPTOPT 0
-#endif
-
 /* Globals to match optarg, optind, opterr, optopt, optreset */
 char *ultraoptarg = NULL;
 int ultraoptind = 1;
 int ultraopterr = 1;
 int ultraoptreset = 1;
-int ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT;
+int ultraoptopt = '?';
 
 static int ultraoptnum = 0; /* How many options of the current multi-option
 			       argument have been processed?  (e.g. -vvv) */
@@ -492,10 +488,17 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	posixly_correct = getenv("POSIXLY_CORRECT");
     }
 
-#ifdef ULTRAGETOPT_DEFAULTOPTARG
-    ultraoptarg = ULTRAGETOPT_DEFAULTOPTARG;
+#ifdef ULTRAGETOPT_NO_DEFAULT_OPTARG
+    if (longopts != NULL) {
+        ultraoptarg = NULL;
+    }
+#else
+    ultraoptarg = NULL;
 #endif
-    ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT;
+
+#ifdef ULTRAGETOPT_DEFAULT_OPTOPT
+    ultraoptopt = ULTRAGETOPT_DEFAULT_OPTOPT;
+#endif
 
     /* Sanity check (These are specified verbatim in SUS) */
     if (ultraoptind > argc
@@ -727,9 +730,6 @@ int ultragetopt(int argc, char * const argv[], const char *optstring)
 }
 
 /* GNU getopt_long workalike
- *
- * Argument reordering not yet implemented
- * Leading + and - under consideration (behavior violates POSIX...)
  */
 int ultragetopt_long(int argc, char *const argv[], const char *shortopts,
 		const struct option *longopts, int *indexptr)
