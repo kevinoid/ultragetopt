@@ -70,6 +70,8 @@
  *				not when it appears after other modifiers ('-'
  *				or '+') in optstring for getopt (always
  *				recognized after others in getopt_long)
+ * ULTRAGETOPT_NO_ALLARGS	Do not recognize '-' as optstring[0] in getopt
+ *				(still recognized in getopt_long and long_only)
  */
 
 #ifdef ULTRAGETOPT_LIKE_POSIX
@@ -103,6 +105,7 @@
 # define ULTRAGETOPT_BSD_ERRORS
 # define ULTRAGETOPT_ERROR_PROGNAME getprogname()
 # define ULTRAGETOPT_COLON_FIRST_ONLY
+# define ULTRAGETOPT_NO_ALLARGS
 # define ULTRAGETOPT_NO_DEFAULT_OPTARG
 # define ULTRAGETOPT_OPTOPT_0_IF_FLAG
 # undef ULTRAGETOPT_ASSIGNSPACE

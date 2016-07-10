@@ -725,11 +725,16 @@ Test(getopt, allargs) {
     };
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "-";
+#ifdef ULTRAGETOPT_NO_ALLARGS
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#else
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 2);
+#endif
 }
 
 Test(getopt, dashdash_allargs) {
@@ -742,11 +747,16 @@ Test(getopt, dashdash_allargs) {
     };
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "-";
+#ifdef ULTRAGETOPT_NO_ALLARGS
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#else
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 3);
+#endif
 }
 
 Test(getopt, colon_allargs) {
@@ -771,18 +781,23 @@ Test(getopt, allargs_colon) {
     };
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "-:r:";
+#ifdef ULTRAGETOPT_NO_ALLARGS
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+#else
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
-#ifdef ULTRAGETOPT_COLON_FIRST_ONLY
+# ifdef ULTRAGETOPT_COLON_FIRST_ONLY
     cr_expect_eq(getopt(argc, argv, optstring), '?');
-#else
+# else
     cr_expect_eq(getopt(argc, argv, optstring), ':');
-#endif
+# endif
     cr_expect_eq(optind, 3);
     cr_expect_eq(optopt, 'r');
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 3);
+#endif
 }
 
 Test(getopt, arg_before_option_allargs_nopremute) {
@@ -797,6 +812,21 @@ Test(getopt, arg_before_option_allargs_nopremute) {
     char *orig_argv[ARRAY_SIZE(argv)];
     // Respect - and not +
     memcpy(orig_argv, argv, sizeof argv);
+#ifdef ULTRAGETOPT_NO_ALLARGS
+# ifdef ULTRAGETOPT_OPTIONPERMUTE
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(argv[0], orig_argv[1]);
+    cr_expect_eq(argv[1], orig_argv[0]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+# else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+# endif
+#else
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
@@ -805,6 +835,7 @@ Test(getopt, arg_before_option_allargs_nopremute) {
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 3);
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+#endif
 }
 
 Test(getopt, arg_before_option_nopermute_allargs) {
@@ -835,7 +866,21 @@ Test(getopt, arg_before_option_allargs) {
     const char *optstring = "-n";
     char *orig_argv[ARRAY_SIZE(argv)];
     memcpy(orig_argv, argv, sizeof argv);
-#ifdef ULTRAGETOPT_OPTIONPERMUTE
+#ifdef ULTRAGETOPT_NO_ALLARGS
+# ifdef ULTRAGETOPT_OPTIONPERMUTE
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(argv[0], orig_argv[1]);
+    cr_expect_eq(argv[1], orig_argv[0]);
+    cr_expect_eq(argv[2], orig_argv[2]);
+# else
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 1);
+    cr_expect_arr_eq(argv, orig_argv, sizeof argv);
+# endif
+#else
     cr_expect_eq(getopt(argc, argv, optstring), 1);
     cr_expect_eq(optarg, argv[1]);
     cr_expect_eq(optind, 2);
@@ -844,9 +889,6 @@ Test(getopt, arg_before_option_allargs) {
     cr_expect_eq(getopt(argc, argv, optstring), -1);
     cr_expect_eq(optind, 3);
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
-#else
-    cr_expect_eq(getopt(argc, argv, optstring), -1);
-    cr_expect_eq(optind, 1);
 #endif
 }
 
