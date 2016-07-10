@@ -878,7 +878,7 @@ Test(getopt_long, arg_before_option_nopremute) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
-Test(getopt_long, order) {
+Test(getopt_long, allargs) {
     char *argv[] = {
         CMDNAME,
         "arg",
@@ -896,7 +896,7 @@ Test(getopt_long, order) {
     cr_expect_eq(optind, 2);
 }
 
-Test(getopt_long, dashdash_order) {
+Test(getopt_long, dashdash_allargs) {
     char *argv[] = {
         CMDNAME,
         "arg1",
@@ -916,7 +916,7 @@ Test(getopt_long, dashdash_order) {
     cr_expect_eq(optind, 3);
 }
 
-Test(getopt_long, colon_order) {
+Test(getopt_long, colon_allargs) {
     char *argv[] = {
         CMDNAME,
         "arg",
@@ -932,7 +932,7 @@ Test(getopt_long, colon_order) {
     cr_expect_eq(optind, 1);
 }
 
-Test(getopt_long, order_colon) {
+Test(getopt_long, allargs_colon) {
     char *argv[] = {
         CMDNAME,
         "arg",
@@ -956,7 +956,7 @@ Test(getopt_long, order_colon) {
     cr_expect_eq(optind, 3);
 }
 
-Test(getopt_long, arg_before_option_order) {
+Test(getopt_long, arg_before_option_allargs) {
     char *argv[] = {
         CMDNAME,
         "arg",
@@ -981,7 +981,7 @@ Test(getopt_long, arg_before_option_order) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
-Test(getopt_long, arg_before_option_order_nopermute) {
+Test(getopt_long, arg_before_option_allargs_nopermute) {
     char *argv[] = {
         CMDNAME,
         "arg",
@@ -1007,7 +1007,7 @@ Test(getopt_long, arg_before_option_order_nopermute) {
     cr_expect_arr_eq(argv, orig_argv, sizeof argv);
 }
 
-Test(getopt_long, arg_before_option_nopermute_order) {
+Test(getopt_long, arg_before_option_nopermute_allargs) {
     char *argv[] = {
         CMDNAME,
         "arg",
