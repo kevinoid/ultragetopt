@@ -395,10 +395,31 @@ Test(getopt, default_optarg) {
     };
     int argc = ARRAY_SIZE(argv) - 1;
     const char *optstring = "";
-    optarg = "test";
+    char *testoptarg = "test";
+    optarg = testoptarg;
     cr_expect_eq(getopt(argc, argv, optstring), -1);
-    cr_expect_eq(optarg, NULL);
+#ifdef ULTRAGETOPT_DEFAULTOPTARG
+    cr_expect_eq(optarg, ULTRAGETOPT_DEFAULTOPTARG);
+#else
+    cr_expect_eq(optarg, testoptarg);
+#endif
     cr_expect_eq(optind, 1);
+}
+
+Test(getopt, default_optarg_withopt) {
+    char *argv[] = {
+        CMDNAME,
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "n";
+    optarg = "test";
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optarg, NULL);
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 2);
 }
 
 Test(getopt, default_optopt) {
