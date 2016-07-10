@@ -492,7 +492,9 @@ int ultragetopt_tunable(int argc, char *const argv[], const char *shortopts,
 	posixly_correct = getenv("POSIXLY_CORRECT");
     }
 
-    ultraoptarg = NULL;
+#ifdef ULTRAGETOPT_DEFAULTOPTARG
+    ultraoptarg = ULTRAGETOPT_DEFAULTOPTARG;
+#endif
     ultraoptopt = ULTRAGETOPT_DEFAULTOPTOPT;
 
     /* Sanity check (These are specified verbatim in SUS) */

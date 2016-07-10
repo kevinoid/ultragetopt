@@ -21,6 +21,8 @@
  * ULTRAGETOPT_ASSIGNSPACE	Parse "-o value" as "value" rather than " value"
  *				Note: Only applicable when argv[x] == "-o value"
  *				      Not for argv[x] == "-o" [x+1] == "value"
+ * ULTRAGETOPT_DEFAULTOPTARG	Set optarg to this value by default on each
+ *				call to getopt()
  * ULTRAGETOPT_DEFAULTOPTOPT	Set optopt to this value by default on each
  *				call to getopt()
  * ULTRAGETOPT_HYPHENARG	Accept -option -arg as -option with argument
@@ -77,6 +79,7 @@
 # undef ULTRAGETOPT_SHORTOPTASSIGN
 #elif defined(ULTRAGETOPT_LIKE_GNU)
 # define ULTRAGETOPT_2CHAR_ARG_SHORT
+# define ULTRAGETOPT_DEFAULTOPTARG NULL
 # define ULTRAGETOPT_GNU_ERRORS
 # define ULTRAGETOPT_HYPHENARG
 # define ULTRAGETOPT_NOMATCH_W_AS_ARG
