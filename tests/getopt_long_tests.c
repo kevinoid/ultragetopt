@@ -1918,7 +1918,7 @@ Test(getopt_long, msg_ambig_wsemi,
     char *buf;
     size_t bufsize;
     cr_expect_eq(getopt_long(argc, argv, shortopts, longopts, NULL), '?');
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(TEST_HOST_GETOPT) && (defined(__GNU_LIBRARY__) || defined(__GLIBC__))
     optind = 2; /* https://sourceware.org/bugzilla/show_bug.cgi?id=20342 */
 #else
     cr_expect_eq(optind, 2);
