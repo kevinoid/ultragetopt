@@ -90,6 +90,21 @@ static const int getoptflags = 0
 			       ;
 
 #ifdef ULTRAGETOPT_GNU_ERRORS
+#if (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
+/* Messages from glibc 2127a18 (first appearing in 2.8) */
+static const char *const errorarg =
+    "%s: option '%.*s' doesn't allow an argument\n";
+static const char *const errornoarg =
+    "%s: option '%.*s' requires an argument \n";
+static const char *const erroropt =
+    "%s: unrecognized option '%.*s'\n";
+static const char *const errorargc =
+    "%s: option '-%c' does not take an argument\n";
+static const char *const errornoargc =
+    "%s: option requires an argument -- '-%c'\n";
+static const char *const erroroptc =
+    "%s: invalid option -- '%c'\n";
+#else
 static const char *const errorarg =
     "%s: option `%.*s' doesn't allow an argument\n";
 static const char *const errornoarg =
@@ -102,6 +117,7 @@ static const char *const errornoargc =
     "%s: option requires an argument -- `-%c'\n";
 static const char *const erroroptc = 
     "%s: invalid option -- %c\n";
+#endif
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
 static const char *const errorarg =
     "%s: option doesn't take an argument -- %.*s\n";

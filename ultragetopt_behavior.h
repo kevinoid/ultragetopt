@@ -45,6 +45,9 @@
  * ULTRAGETOPT_BSD_ERRORS	Print error messages matching BSD getopt
  * ULTRAGETOPT_DARWIN_ERRORS	Print error messages matching Darwin getopt
  * ULTRAGETOPT_GNU_ERRORS	Print error messages matching GNU getopt
+ *                              Can be defined to 0/empty for current error
+ *                              format or to CCCMMMmmm (for libc version, major
+ *                              version, minor version)
  * ULTRAGETOPT_NO_EATDASHDASH	Do not increment optind when argv[optind] is --
  * ULTRAGETOPT_NO_OPTIONALARG	Do not support GNU "::" optional argument
  *				Always supported in *_long*()

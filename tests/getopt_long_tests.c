@@ -1765,12 +1765,15 @@ Test(getopt_long, msg_invalid_shortopt,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 'n');
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: invalid option -- 'n'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: invalid option -- n\n", ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
-    cr_expect_str_eqf(buf, "%s: unknown option -- -n\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: unknown option -- n\n", ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: illegal option -- -n\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: illegal option -- n\n", ERR_PROGNAME);
 #endif
     if (buf) {
         free(buf);
@@ -1797,12 +1800,15 @@ Test(getopt_long, msg_invalid_longopt,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: unrecognized option '--noarg'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: unrecognized option `--noarg'\n", ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
-    cr_expect_str_eqf(buf, "%s: unknown option -- --noarg\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: unknown option -- noarg\n", ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: illegal option -- --noarg\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: illegal option -- noarg\n", ERR_PROGNAME);
 #endif
     if (buf) {
         free(buf);
@@ -1836,13 +1842,17 @@ Test(getopt_long, msg_invalid_wsemi,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: unrecognized option '-W noarg'\n",
             ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: unrecognized option `-W noarg'\n",
+            ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
-    cr_expect_str_eqf(buf, "%s: unknown option -- -W noarg\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: unknown option -- W noarg\n", ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: illegal option -- -W noarg\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: illegal option -- W noarg\n", ERR_PROGNAME);
 #endif
     if (buf) {
         free(buf);
@@ -1873,13 +1883,16 @@ Test(getopt_long, msg_ambig,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '--no' is ambiguous; possibilities:"
             " '--noa' '--nob'\n", ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `--no' is ambiguous\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- no\n", ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: ambiguous option -- --no\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- no\n", ERR_PROGNAME);
 #endif
     if (buf) {
         free(buf);
@@ -1912,12 +1925,15 @@ Test(getopt_long, msg_ambig_wsemi,
 #endif
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '-W no' is ambiguous\n", ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `-W no' is ambiguous\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- W no\n", ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: ambiguous option -- -W no\n", ERR_PROGNAME);
+    cr_expect_str_eqf(buf, "%s: ambiguous option -- W no\n", ERR_PROGNAME);
 #endif
     if (buf) {
         free(buf);
@@ -1945,14 +1961,18 @@ Test(getopt_long, msg_noarg,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 'N');
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '--noarg' doesn't allow an argument\n",
             ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `--noarg' doesn't allow an argument\n",
             ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option doesn't take an argument -- noarg\n",
+            ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: option does not take an argument -- --noarg\n",
+    cr_expect_str_eqf(buf, "%s: option does not take an argument -- noarg\n",
             ERR_PROGNAME);
 #endif
     if (buf) {
@@ -1981,14 +2001,18 @@ Test(getopt_long, msg_noarg_wsemi,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '-W noarg' doesn't allow an argument\n",
             ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `-W noarg' doesn't allow an argument\n",
             ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option doesn't take an argument -- W noarg\n",
+            ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: option does not take an argument -- -W noarg\n",
+    cr_expect_str_eqf(buf, "%s: option does not take an argument -- W noarg\n",
             ERR_PROGNAME);
 #endif
     if (buf) {
@@ -2017,14 +2041,18 @@ Test(getopt_long, msg_reqarg,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 'R');
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '--reqarg' requires an argument\n",
             ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `--reqarg' requires an argument\n",
             ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- reqarg\n",
+            ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: option requires an argument -- --reqarg\n";
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- reqarg\n",
             ERR_PROGNAME);
 #endif
     if (buf) {
@@ -2053,14 +2081,18 @@ Test(getopt_long, msg_reqarg_wsemi,
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 0);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option '-W reqarg' requires an argument\n",
             ERR_PROGNAME);
-#elif defined(ULTRAGETOPT_BSD_ERRORS)
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
     cr_expect_str_eqf(buf, "%s: option `-W reqarg' requires an argument\n",
             ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_BSD_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- W reqarg\n",
+            ERR_PROGNAME);
 #else
-    cr_expect_str_eqf(buf, "%s: option requires an argument -- -W reqarg\n";
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- W reqarg\n",
             ERR_PROGNAME);
 #endif
     if (buf) {

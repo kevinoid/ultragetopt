@@ -1355,8 +1355,11 @@ Test(getopt, msg_invalid_opt, .init = init_capture, .fini = fini_capture) {
     cr_expect_eq(getopt(argc, argv, optstring), '?');
     cr_expect_eq(optind, 2);
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: invalid option -- 'a'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: invalid option -- a\n", ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
     cr_expect_str_eqf(buf, "%s: illegal option -- a\n", ERR_PROGNAME);
 #else
@@ -1383,8 +1386,12 @@ Test(getopt, msg_missing_arg, .init = init_capture, .fini = fini_capture) {
     cr_expect_eq(optind, 2);
     cr_expect_eq(optopt, 'r');
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: option requires an argument -- 'r'\n",
+            ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: option requires an argument -- r\n",
             ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
     cr_expect_str_eqf(buf, "%s: option requires an argument -- r\n",
@@ -1458,8 +1465,11 @@ Test(getopt, msg_longopt, .init = init_capture, .fini = fini_capture) {
     cr_expect_eq(optind, 1);
     cr_expect_eq(optopt, '-');
     buf = read_capture_str_stderr(&bufsize);
-#ifdef ULTRAGETOPT_GNU_ERRORS
+#if defined(ULTRAGETOPT_GNU_ERRORS) && \
+    (ULTRAGETOPT_GNU_ERRORS + 0 == 0 || ULTRAGETOPT_GNU_ERRORS + 0 >= 6002008)
     cr_expect_str_eqf(buf, "%s: invalid option -- '-'\n", ERR_PROGNAME);
+#elif defined(ULTRAGETOPT_GNU_ERRORS)
+    cr_expect_str_eqf(buf, "%s: invalid option -- -\n", ERR_PROGNAME);
 #elif defined(ULTRAGETOPT_BSD_ERRORS)
     cr_expect_str_eqf(buf, "%s: illegal option -- -\n", ERR_PROGNAME);
 #else
