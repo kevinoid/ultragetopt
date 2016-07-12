@@ -480,6 +480,27 @@ Test(getopt, dashdash_opt) {
     cr_expect_eq(optind, 2);
 }
 
+Test(getopt, dashoptdash) {
+    char *argv[] = {
+        CMDNAME,
+        "-n-",
+        "-n",
+        NULL
+    };
+    int argc = ARRAY_SIZE(argv) - 1;
+    const char *optstring = "n";
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 1);
+    cr_expect_eq(getopt(argc, argv, optstring), '?');
+    cr_expect_eq(optind, 2);
+    cr_expect_eq(optopt, '-');
+    // Ensure option processing doesn't stop after '-' option
+    cr_expect_eq(getopt(argc, argv, optstring), 'n');
+    cr_expect_eq(optind, 3);
+    cr_expect_eq(getopt(argc, argv, optstring), -1);
+    cr_expect_eq(optind, 3);
+}
+
 Test(getopt, missing_optarg) {
     char *argv[] = {
         CMDNAME,
